@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=yes">
     <meta name="author" content="Václav Žižkovský">
     <meta name="format-detection" content="telephone=no">
+    <script src="https://use.fontawesome.com/db31641a83.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="stylesheet" type="text/css" href="./css/css.css">
     <script src="./js/pieceClass.js"></script>
     <script src="./js/boardClass.js"></script>
@@ -15,8 +20,49 @@
 </head>
 
 <body>
+    <div id="menu">
+        <button title="Barva hráče na tahu">
+            <img class="playing-player-img" src="./img/redPiece.png">
+        </button>
+        <button title="Zapnout/vypnout bota">
+            <i class="fa-solid fa-robot"></i><br />
+            <i class="fa-solid fa-toggle-on"></i>
+        </button>
+        <button title="Vložit vlastní hru">
+            <i class="fa-solid fa-keyboard"></i>
+        </button>
+        <button title="Zobrazit statistiky">
+            <i class="fa-solid fa-chart-line"></i>
+        </button>
+        <button title="Nastavení hry">
+            <i class="fa-solid fa-gear"></i>
+        </button>
+        <button title="Odejít ze hry">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+    </div>
+
     <div id="game-area">
     </div>
+
+    <div id="winning-modal" class="modal">
+        <i class="fa-solid fa-xmark close" onclick="this.parentElement.style.display = 'none';"></i>
+        <div class="modal-header">
+            <h1>Konec hry</h1>
+        </div>
+
+        <div class="modal-content">
+            
+        </div>
+
+        <div class="modal-footer">
+            <button><i class="fa-solid fa-rotate-right"></i></button>
+            <button><i class="fa-solid fa-compass"></i></button>
+            <button><i class="fa-solid fa-share"></i></button>
+        </div>
+    </div>
+
+
 </body>
 
 </html>

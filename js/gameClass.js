@@ -3,10 +3,12 @@ class Game {
     gameArea;
     playingPlayer;
     isWinner = false;
+    gameIsDraw = false;
 
-    constructor(rows, cols, gameArea) {
+    constructor(rows, cols, playWithBot, gameArea, menu) {
         this.gameArea = document.getElementById(gameArea);
-        this.playingPlayer = 'red'
+        this.menu = document.getElementById(menu);
+        this.playingPlayer = 'red';
         this.initializeStartingPosition(rows, cols);
     }
 
@@ -26,54 +28,33 @@ class Game {
         if (this.isWinner) {
             return;
         }
+
         let addedPiece = this.addPieceToColumn(col, true, this.playingPlayer);
         if (!addedPiece) {
             return;
         }
-        this.drawCurrentPosition();
-        if (this.board.checkWin(addedPiece, this.playingPlayer)) {
-            this.isWinner = true;
-            //highlight winned
-            alert("winner: "+this.playingPlayer);
-            return;
-        }
-        this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
-    }
+
+        this.isWinner = this.board.checkWin(addedPiece, this.playingPlayer) || this.board.getPossibleMoves().length == 0;
+        this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece, this.playingPlayer);
 
 
-
-
-
-    hoverCol(col, unhover) {
-        /*if (this.isWinner) {
-            return;
-        }
-        if (unhover) {
-
+        if (!this.isWinner) {
+            this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
         } else {
-            this.addPieceToColumn(col, false, this.playingPlayer + 'Hover');
-            document.querySelector(`#${this.gameArea.id} .col-${col}`).removeAttribute('onmouseover');
-            document.querySelector(`#${this.gameArea.id} .col-${col}`).setAttribute('onmousedown', `game.hoverCol(${col}, true)`);
+            this.showWinningModal();
         }
-        this.drawCurrentPosition();*/
+
+        this.drawCurrentPosition();
+
+
     }
 
 
     addPieceToColumn(col, pieceHasColor, pieceColor) {
-        let highestPiece = -1;
+        let pieceRow = this.board.getNewPieceRow(col);
 
-        this.board.pieces.forEach(piece => {
-            if (piece.col == col && piece.row > highestPiece) {
-                if (piece.hasColor && highestPiece == -1) {
-                    highestPiece = piece.row - 1;
-                } else if (!piece.hasColor && piece.row == this.board.rows) {
-                    highestPiece = piece.row;
-                }
-            }
-        });
-
-        if (highestPiece > 0) {
-            let piece = new Piece(pieceHasColor, pieceColor, highestPiece, col);
+        if (pieceRow > 0) {
+            let piece = new Piece(pieceHasColor, pieceColor, pieceRow, col);
             this.board.addPiece(piece);
             return piece;
         } else {
@@ -81,7 +62,9 @@ class Game {
         }
     }
 
-
+    /**
+     * @description Vykreslí aktuální pozici
+     */
     drawCurrentPosition() {
         this.gameArea.innerHTML = '';
 
@@ -90,7 +73,23 @@ class Game {
         }
 
         this.board.pieces.forEach(piece => {
-            document.querySelector(".col-" + piece.col).innerHTML += '<div class="row row-' + piece.row + '"><img src="./img/' + piece.color + 'Piece.png"></div>';
+            let fullPiece = piece.hasColor ? 'full' : '';
+            document.querySelector(".col-" + piece.col).innerHTML += '<div class="row row-' + piece.row + ' ' + fullPiece + '"><img src="./img/' + piece.color + 'Piece.png"></div>';
         });
+
+        /** ukaze kdo je na tahu v menu*/
+        this.menu.querySelector('#' + this.menu.id + ' .playing-player-img').setAttribute('src', './img/' + this.playingPlayer + 'Piece.png');
+    }
+
+    showWinningModal() {
+        if(!this.isWinner){
+            return;
+        }
+
+        document.getElementById('winning-modal').style.display = 'flex';
+        
+        let gameState = this.gameIsDraw ? ' remízou' : '. Vyhrál hráč '+this.playingPlayer;
+        document.querySelector('#winning-modal .modal-content').innerHTML = `
+        <p>Hra skončila${gameState}</p>`;
     }
 }

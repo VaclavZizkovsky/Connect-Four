@@ -13,30 +13,41 @@ class Board {
         }
     }
 
+    getPossibleMoves() {
+        let moves = [];
+
+        for (let i = 0; i < this.cols; i++) {
+            if (this.getNewPieceRow(i + 1) != -1){
+                moves.push(i + 1);
+            }
+        }
+
+        return moves;
+    }
+
+    getNewPieceRow(col) {
+        let pieceRow = -1;
+
+        this.pieces.forEach(piece => {
+            if (piece.col == col && piece.row > pieceRow) {
+                if (piece.hasColor && pieceRow == -1) {
+                    pieceRow = piece.row - 1;
+                } else if (!piece.hasColor && piece.row == this.rows) {
+                    pieceRow = piece.row;
+                }
+            }
+        });
+
+        pieceRow = pieceRow == 0 ? -1 : pieceRow;
+        return pieceRow;
+    }
+
     checkWin(piece, playerColor) {
-        //horizontal
+
         let verticalSameColor = this.samePiecesInDirection(piece, playerColor, 0, 1) + this.samePiecesInDirection(piece, playerColor, 0, -1);
         let horizontalSameColor = this.samePiecesInDirection(piece, playerColor, 1, 0) + this.samePiecesInDirection(piece, playerColor, -1, 0);
         let diagonal1SameColor = this.samePiecesInDirection(piece, playerColor, 1, 1) + this.samePiecesInDirection(piece, playerColor, -1, -1);
         let diagonal2SameColor = this.samePiecesInDirection(piece, playerColor, -1, 1) + this.samePiecesInDirection(piece, playerColor, 1, -1);
-        //alert(diagonal1SameColor);
-        /*for (let i = piece.row + 1; i < this.rows; i++) {
-            let nextPiece = this.findPiece(i, piece.col);
-            if (!nextPiece || !(nextPiece.hasColor && nextPiece.color == playerColor)) {
-                break;
-            } else {
-                horizontalSameColor++;
-            }
-        }
-
-        for (let i = piece.row - 1; i > 0; i--) {
-            let nextPiece = this.findPiece(i, piece.col);
-            if (!nextPiece || !(nextPiece.hasColor && nextPiece.color == playerColor)) {
-                break;
-            } else {
-                horizontalSameColor++;
-            }
-        }*/
 
         if (verticalSameColor >= 5 || horizontalSameColor >= 5 || diagonal1SameColor >= 5 || diagonal2SameColor >= 5) {
             return true;
@@ -50,7 +61,7 @@ class Board {
         let j = piece.col;
         let samePiecesInDirection = 0;
 
-        while (i <= this.rows && i > 0 && j > 0 && j <= this.cols){
+        while (i <= this.rows && i > 0 && j > 0 && j <= this.cols) {
             let nextPiece = this.findPiece(i, j);
             if (!nextPiece || !(nextPiece.hasColor && nextPiece.color == playerColor)) {
                 break;
@@ -61,14 +72,6 @@ class Board {
             j += horizontalIncrement;
         }
 
-            /*for (let i = piece.row + 1; i < this.rows; i = i + horizontalIncrement) {
-                let nextPiece = this.findPiece(i, piece.col);
-                if (!nextPiece || !(nextPiece.hasColor && nextPiece.color == playerColor)) {
-                    break;
-                } else {
-                    horizontalSameColor++;
-                }
-            }*/
         return samePiecesInDirection;
     }
 

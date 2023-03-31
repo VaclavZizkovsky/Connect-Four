@@ -1,10 +1,23 @@
+:root {
+    --background: #1D263B;
+    --menu-background: #5C6784;
+    --menu-font-size: 60px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
 #game-area {
-    background-color: black;
+    background-color: var(--background);
     width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: space-around;
-    align-self: center
+    align-self: center;
 }
 
 #game-area .col {
@@ -16,26 +29,88 @@
 }
 
 #game-area .col:hover {
-    background-color: rgb(65, 65, 65);
+    background-color: rgb(66, 66, 66);
     cursor: pointer;
 }
 
-#game-area .col .row{
-    /*add something*/
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
-#game-area .col .row img{
+#menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: center;
+    background-color: var(--menu-background);
+    padding: 10px;
+}
+
+#menu button {
+    font-size: calc(var(--menu-font-size) - 15px);
+    color: white;
+}
+
+#menu button img {
+    cursor: default;
+    width: var(--menu-font-size);
+}
+
+
+#game-area .col .row img {
     max-height: 10vh;
     max-width: 10vw;
     user-select: none;
     border-radius: 10vw;
+    border: 3px solid #4CB963;
+}
+
+#game-area .col .row.full img {
+    border: 0;
 }
 
 body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 0;
     margin: 0;
     overflow-x: hidden;
     display: flex;
     justify-content: center;
 
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    background-color: azure;
+    text-align: center;
+    /*display: flex;*/
+    flex-direction: column;
+    justify-content: space-between;
+
+    /* width and height params, centering */
+    width: 500px;
+    height: 300px;
+    top: calc(50vh - 150px);
+    left: calc(50vw + 10px - 250px + (var(--menu-font-size) / 2));
+}
+
+.modal .close {
+    cursor: pointer;
+    font-size: 20px;
+    position: absolute;
+    inset: 20px 20px auto auto;
+}
+
+.modal .modal-footer {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.modal-footer button{
+    font-size: 30px;
 }
