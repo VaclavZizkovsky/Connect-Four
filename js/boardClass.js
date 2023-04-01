@@ -1,10 +1,25 @@
+/**
+ * @class Třída pro board s žetony
+ */
 class Board {
+
+    /**
+     * 
+     * @param {Array} pieces 
+     * @param {number} rows 
+     * @param {number} cols 
+     */
     constructor(pieces, rows, cols) {
         this.pieces = pieces;
         this.rows = rows;
         this.cols = cols;
     }
 
+    /**
+     * 
+     * @param {Piece} piece
+     * @description Přidá žeton na board 
+     */
     addPiece(piece) {
         for (let i = 0; i < this.pieces.length; i++) {
             if (piece.col == this.pieces[i].col && piece.row == this.pieces[i].row) {
@@ -13,6 +28,10 @@ class Board {
         }
     }
 
+    /**
+     * @description Vrátí všechny možné tahy v této pozici
+     * @returns {Array} Všechny možné tahy
+     */
     getPossibleMoves() {
         let moves = [];
 
@@ -25,6 +44,11 @@ class Board {
         return moves;
     }
 
+    /**
+     * @description Zjistí řádek, kam umístit žeton v daném sloupci
+     * @param {number} col 
+     * @returns {number} řádek, kam se umístí příští žeton
+     */
     getNewPieceRow(col) {
         let pieceRow = -1;
 
@@ -42,6 +66,12 @@ class Board {
         return pieceRow;
     }
 
+    /**
+     * @description Zjistí jestli někdo nevyhrál
+     * @param {Piece} piece 
+     * @param {string} playerColor 
+     * @returns {boolean} vyhrál nějaký hráč
+     */
     checkWin(piece, playerColor) {
 
         let verticalSameColor = this.samePiecesInDirection(piece, playerColor, 0, 1) + this.samePiecesInDirection(piece, playerColor, 0, -1);
@@ -56,6 +86,14 @@ class Board {
         return false;
     }
 
+    /**
+     * @description Vrátí žetony stejné barvy
+     * @param {Piece} piece 
+     * @param {string} playerColor 
+     * @param {number} horizontalIncrement 
+     * @param {number} verticalIncrement 
+     * @returns {number} všechny žetony stejné barvy v dané řadě
+     */
     samePiecesInDirection(piece, playerColor, horizontalIncrement, verticalIncrement) {
         let i = piece.row;
         let j = piece.col;
@@ -75,6 +113,12 @@ class Board {
         return samePiecesInDirection;
     }
 
+    /**
+     * @description Najde žeton podle řádku a sloupce
+     * @param {number} row 
+     * @param {number} col 
+     * @returns nalezený žeton nebo false
+     */
     findPiece(row, col) {
         let foundPiece = false;
         for (let i = 0; i < this.pieces.length; i++) {

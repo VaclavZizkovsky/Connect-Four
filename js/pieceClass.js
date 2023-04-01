@@ -17,4 +17,4 @@ class Piece {
         this.col = col;
     }
 
-} 
+}

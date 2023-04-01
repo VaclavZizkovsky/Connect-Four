@@ -1,10 +1,17 @@
 class Game {
-    board;
     gameArea;
     playingPlayer;
     isWinner = false;
     gameIsDraw = false;
 
+    /**
+     * 
+     * @param {number} rows 
+     * @param {number} cols 
+     * @param {boolean} playWithBot 
+     * @param {*} gameArea 
+     * @param {*} menu 
+     */
     constructor(rows, cols, playWithBot, gameArea, menu) {
         this.gameArea = document.getElementById(gameArea);
         this.menu = document.getElementById(menu);
@@ -12,7 +19,11 @@ class Game {
         this.initializeStartingPosition(rows, cols);
     }
 
-
+    /**
+     * @description Připraví hru a board s prazdnýma žetonama
+     * @param {number} rows 
+     * @param {number} cols 
+     */
     initializeStartingPosition(rows, cols) {
         let pieces = [];
         for (let i = 0; i < cols; i++) {
@@ -23,7 +34,10 @@ class Game {
         this.board = new Board(pieces, rows, cols);
     }
 
-
+    /**
+     * @description Udělá tah a zkontroluje výhru
+     * @param {number} col
+     */
     makeMove(col) {
         if (this.isWinner) {
             return;
@@ -49,7 +63,13 @@ class Game {
 
     }
 
-
+    /**
+     * @description Přidá žeton do sloupce
+     * @param {number} col 
+     * @param {boolean} pieceHasColor 
+     * @param {string} pieceColor 
+     * @returns Objekt žetonu nebo false
+     */
     addPieceToColumn(col, pieceHasColor, pieceColor) {
         let pieceRow = this.board.getNewPieceRow(col);
 
@@ -81,6 +101,9 @@ class Game {
         this.menu.querySelector('#' + this.menu.id + ' .playing-player-img').setAttribute('src', './img/' + this.playingPlayer + 'Piece.png');
     }
 
+    /**
+     * @description Ukáže modal s výsledkem hry
+     */
     showWinningModal() {
         if(!this.isWinner){
             return;
