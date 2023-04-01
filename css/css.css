@@ -2,6 +2,8 @@
     --background: #1D263B;
     --menu-background: #5C6784;
     --menu-font-size: 60px;
+    --message-background: rgb(53, 63, 63);
+    --box-shadow: rgba(243, 243, 243, 0.527) 0px 0px 30px;
 }
 
 *,
@@ -58,13 +60,12 @@ button {
     width: var(--menu-font-size);
 }
 
-
 #game-area .col .row img {
     max-height: 10vh;
     max-width: 10vw;
     user-select: none;
     border-radius: 10vw;
-    border: 3px solid #4CB963;
+    border: 3px solid #8460f1;
 }
 
 #game-area .col .row.full img {
@@ -82,20 +83,23 @@ body {
 }
 
 .modal {
+    color: white;
     display: none;
-    position: absolute;
-    z-index: 2;
-    background-color: azure;
+    background-color: var(--message-background);
     text-align: center;
-    /*display: flex;*/
     flex-direction: column;
     justify-content: space-between;
+    box-shadow: var(--box-shadow);
+    animation: fadeIn 0.5s;
+
 
     /* width and height params, centering */
     width: 500px;
     height: 300px;
     top: calc(50vh - 150px);
     left: calc(50vw + 10px - 250px + (var(--menu-font-size) / 2));
+    position: absolute;
+    z-index: 2;
 }
 
 .modal .close {
@@ -111,6 +115,60 @@ body {
     margin-bottom: 15px;
 }
 
-.modal-footer button{
+.modal-footer button {
     font-size: 30px;
+    color: white;
+}
+
+#message-snackbar {
+    color: white;
+    visibility: hidden;
+    position: absolute;
+    text-align: center;
+    min-width: 400px !important;
+    top: 100px;
+    background-color: var(--message-background);
+    padding: 20px 20px;
+    z-index: 2;
+    box-shadow: var(--box-shadow);
+    border-radius: 10px;
+}
+
+#message-snackbar.showed {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 100px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        top: 100px;
+        opacity: 1;
+    }
+
+    to {
+        top: 0;
+        opacity: 0;
+    }
 }

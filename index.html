@@ -24,6 +24,9 @@
         <button title="Barva hráče na tahu">
             <img class="playing-player-img" src="./img/redPiece.png">
         </button>
+        <button title="Vzdát hru" onclick="game.resignGame();">
+            <i class="fa-solid fa-flag"></i>
+        </button>
         <button title="Zapnout/vypnout bota">
             <i class="fa-solid fa-robot"></i><br />
             <i class="fa-solid fa-toggle-on"></i>
@@ -56,12 +59,15 @@
         </div>
 
         <div class="modal-footer">
-            <button><i class="fa-solid fa-rotate-right"></i></button>
+            <button title="Další hra" onclick="game.startNextGame()"><i class="fa-solid fa-forward"></i></button>
             <button><i class="fa-solid fa-compass"></i></button>
             <button><i class="fa-solid fa-share"></i></button>
         </div>
     </div>
 
+    <div id="message-snackbar">
+        msg
+    </div>
 
 </body>
 

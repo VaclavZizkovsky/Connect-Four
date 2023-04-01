@@ -2,6 +2,7 @@
  * @class Třída pro board s žetony
  */
 class Board {
+    moves = [];
 
     /**
      * 
@@ -24,6 +25,7 @@ class Board {
         for (let i = 0; i < this.pieces.length; i++) {
             if (piece.col == this.pieces[i].col && piece.row == this.pieces[i].row) {
                 this.pieces.splice(i, 1, piece);
+                this.moves.push(piece.col);
             }
         }
     }
@@ -36,7 +38,7 @@ class Board {
         let moves = [];
 
         for (let i = 0; i < this.cols; i++) {
-            if (this.getNewPieceRow(i + 1) != -1){
+            if (this.getNewPieceRow(i + 1) != -1) {
                 moves.push(i + 1);
             }
         }

@@ -1,8 +1,10 @@
 class Game {
     gameArea;
     playingPlayer;
-    isWinner = false;
+    gameEnded = false;
+    gameResigned = false;
     gameIsDraw = false;
+    oldGames = [];
 
     /**
      * 
@@ -15,8 +17,7 @@ class Game {
     constructor(rows, cols, playWithBot, gameArea, menu) {
         this.gameArea = document.getElementById(gameArea);
         this.menu = document.getElementById(menu);
-        this.playingPlayer = 'red';
-        this.initializeStartingPosition(rows, cols);
+        this.initializeStartingPosition(rows, cols, playWithBot);
     }
 
     /**
@@ -24,7 +25,13 @@ class Game {
      * @param {number} rows 
      * @param {number} cols 
      */
-    initializeStartingPosition(rows, cols) {
+    initializeStartingPosition(rows, cols, playWithBot) {
+        this.playingPlayer = 'red';
+        this.playWithBot = playWithBot;
+        if(playWithBot){
+            this.bot = new Bot();
+        }
+
         let pieces = [];
         for (let i = 0; i < cols; i++) {
             for (let j = 0; j < rows; j++) {
@@ -32,6 +39,8 @@ class Game {
             }
         }
         this.board = new Board(pieces, rows, cols);
+        this.drawCurrentPosition();
+        showMessage('Začíná hráč red');
     }
 
     /**
@@ -39,7 +48,7 @@ class Game {
      * @param {number} col
      */
     makeMove(col) {
-        if (this.isWinner) {
+        if (this.gameEnded) {
             return;
         }
 
@@ -48,19 +57,20 @@ class Game {
             return;
         }
 
-        this.isWinner = this.board.checkWin(addedPiece, this.playingPlayer) || this.board.getPossibleMoves().length == 0;
+        this.gameEnded = this.board.checkWin(addedPiece, this.playingPlayer) || this.board.getPossibleMoves().length == 0;
         this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece, this.playingPlayer);
 
-
-        if (!this.isWinner) {
+        if (!this.gameEnded) {
             this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
+            /** Zapnout bota */
+            if(this.playWithBot){
+
+            }
         } else {
             this.showWinningModal();
         }
 
         this.drawCurrentPosition();
-
-
     }
 
     /**
@@ -82,6 +92,30 @@ class Game {
         }
     }
 
+    resignGame(){
+        if (this.gameEnded) {
+            return;
+        }
+
+        this.gameEnded = true;
+        this.gameResigned = true; 
+        this.showWinningModal();
+    }
+
+    startNextGame(){
+        if (!this.gameEnded) {
+            return;
+        }
+
+        document.getElementById('winning-modal').style.display = 'none';
+
+        this.oldGames.push(this.board.moves);
+        this.gameEnded = false;
+        this.gameIsDraw = false;
+        this.gameResigned = false;
+        this.initializeStartingPosition(this.board.rows, this.board.cols, playWithBot);
+    }
+
     /**
      * @description Vykreslí aktuální pozici
      */
@@ -94,24 +128,26 @@ class Game {
 
         this.board.pieces.forEach(piece => {
             let fullPiece = piece.hasColor ? 'full' : '';
-            document.querySelector(".col-" + piece.col).innerHTML += '<div class="row row-' + piece.row + ' ' + fullPiece + '"><img src="./img/' + piece.color + 'Piece.png"></div>';
+            document.querySelector(`.col-${piece.col}`).innerHTML += '<div class="row row-' + piece.row + ' ' + fullPiece + '"><img src="./img/' + piece.color + 'Piece.png"></div>';
         });
 
         /** ukaze kdo je na tahu v menu*/
-        this.menu.querySelector('#' + this.menu.id + ' .playing-player-img').setAttribute('src', './img/' + this.playingPlayer + 'Piece.png');
+        let playingImgSource = this.gameEnded ? 'empty' : this.playingPlayer;
+        this.menu.querySelector('#' + this.menu.id + ' .playing-player-img').setAttribute('src', `./img/${playingImgSource}Piece.png`);
     }
 
     /**
      * @description Ukáže modal s výsledkem hry
      */
     showWinningModal() {
-        if(!this.isWinner){
+        if(!this.gameEnded){
             return;
         }
-
+        
+        this.drawCurrentPosition();
         document.getElementById('winning-modal').style.display = 'flex';
         
-        let gameState = this.gameIsDraw ? ' remízou' : '. Vyhrál hráč '+this.playingPlayer;
+        let gameState = this.gameIsDraw ? ' remízou' : (this.gameResigned ? ' vzdáním hráče ' : '. Vyhrál hráč ')+this.playingPlayer;
         document.querySelector('#winning-modal .modal-content').innerHTML = `
         <p>Hra skončila${gameState}</p>`;
     }
