@@ -57,14 +57,17 @@ class Game {
             return;
         }
 
-        this.gameEnded = this.board.checkWin(addedPiece, this.playingPlayer) || this.board.getPossibleMoves().length == 0;
-        this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece, this.playingPlayer);
+        this.gameEnded = this.board.checkWin(addedPiece) || this.board.getPossibleMoves().length == 0;
+        this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece);
 
         if (!this.gameEnded) {
             this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
             /** Zapnout bota */
             if(this.playWithBot){
-
+                let boardCopy = this.board.copy();
+                /*boardCopy.pieces[0].color = 'red';
+                console.log(boardCopy == this.board);*/
+                this.bot.getBestMove(boardCopy, this.playingPlayer);
             }
         } else {
             this.showWinningModal();

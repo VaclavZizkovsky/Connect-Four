@@ -36,7 +36,7 @@ class Board {
      */
     getPossibleMoves() {
         let moves = [];
-
+        
         for (let i = 0; i < this.cols; i++) {
             if (this.getNewPieceRow(i + 1) != -1) {
                 moves.push(i + 1);
@@ -74,12 +74,12 @@ class Board {
      * @param {string} playerColor 
      * @returns {boolean} vyhrál nějaký hráč
      */
-    checkWin(piece, playerColor) {
+    checkWin(piece) {
 
-        let verticalSameColor = this.samePiecesInDirection(piece, playerColor, 0, 1) + this.samePiecesInDirection(piece, playerColor, 0, -1);
-        let horizontalSameColor = this.samePiecesInDirection(piece, playerColor, 1, 0) + this.samePiecesInDirection(piece, playerColor, -1, 0);
-        let diagonal1SameColor = this.samePiecesInDirection(piece, playerColor, 1, 1) + this.samePiecesInDirection(piece, playerColor, -1, -1);
-        let diagonal2SameColor = this.samePiecesInDirection(piece, playerColor, -1, 1) + this.samePiecesInDirection(piece, playerColor, 1, -1);
+        let verticalSameColor = this.samePiecesInDirection(piece, 0, 1) + this.samePiecesInDirection(piece, 0, -1);
+        let horizontalSameColor = this.samePiecesInDirection(piece, 1, 0) + this.samePiecesInDirection(piece, -1, 0);
+        let diagonal1SameColor = this.samePiecesInDirection(piece, 1, 1) + this.samePiecesInDirection(piece, -1, -1);
+        let diagonal2SameColor = this.samePiecesInDirection(piece, -1, 1) + this.samePiecesInDirection(piece, 1, -1);
 
         if (verticalSameColor >= 5 || horizontalSameColor >= 5 || diagonal1SameColor >= 5 || diagonal2SameColor >= 5) {
             return true;
@@ -96,14 +96,14 @@ class Board {
      * @param {number} verticalIncrement 
      * @returns {number} všechny žetony stejné barvy v dané řadě
      */
-    samePiecesInDirection(piece, playerColor, horizontalIncrement, verticalIncrement) {
+    samePiecesInDirection(piece, horizontalIncrement, verticalIncrement) {
         let i = piece.row;
         let j = piece.col;
         let samePiecesInDirection = 0;
 
         while (i <= this.rows && i > 0 && j > 0 && j <= this.cols) {
             let nextPiece = this.findPiece(i, j);
-            if (!nextPiece || !(nextPiece.hasColor && nextPiece.color == playerColor)) {
+            if (!nextPiece || !(nextPiece.hasColor && nextPiece.color == piece.color)) {
                 break;
             } else {
                 samePiecesInDirection++;
@@ -130,5 +130,12 @@ class Board {
             }
         }
         return foundPiece;
+    }
+
+    copy() {
+        let newBoard = new Board([], this.rows, this.cols);
+        newBoard.pieces = structuredClone(this.pieces);
+        newBoard.moves = structuredClone(this.moves);
+        return newBoard;
     }
 }
