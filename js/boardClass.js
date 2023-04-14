@@ -36,6 +36,9 @@ class Board {
      */
     getPossibleMoves() {
         let moves = [];
+        if(this.checkWin()){
+            return moves;
+        }
         
         for (let i = 0; i < this.cols; i++) {
             if (this.getNewPieceRow(i + 1) != -1) {
@@ -74,7 +77,8 @@ class Board {
      * @param {string} playerColor 
      * @returns {boolean} vyhrál nějaký hráč
      */
-    checkWin(piece) {
+    checkWin() {
+        let piece = this.getLastPiece();
 
         let verticalSameColor = this.samePiecesInDirection(piece, 0, 1) + this.samePiecesInDirection(piece, 0, -1);
         let horizontalSameColor = this.samePiecesInDirection(piece, 1, 0) + this.samePiecesInDirection(piece, -1, 0);
@@ -113,6 +117,14 @@ class Board {
         }
 
         return samePiecesInDirection;
+    }
+
+    getLastPiece(){
+        if(!this.moves.length >= 1){
+            return false;
+        }
+
+        return this.findPiece(this.getNewPieceRow(this.moves[this.moves.length - 1]) + 1, this.moves[this.moves.length - 1]);
     }
 
     /**

@@ -28,7 +28,7 @@ class Game {
     initializeStartingPosition(rows, cols, playWithBot) {
         this.playingPlayer = 'red';
         this.playWithBot = playWithBot;
-        if(playWithBot){
+        if (playWithBot) {
             this.bot = new Bot();
         }
 
@@ -61,13 +61,28 @@ class Game {
         this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece);
 
         if (!this.gameEnded) {
-            this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
             /** Zapnout bota */
-            if(this.playWithBot){
-                let boardCopy = this.board.copy();
-                /*boardCopy.pieces[0].color = 'red';
-                console.log(boardCopy == this.board);*/
-                this.bot.getBestMove(boardCopy, this.playingPlayer);
+            if (this.playWithBot) {
+                let botColor = this.playingPlayer == 'red' ? 'blue' : 'red';
+
+                /** hledani nejlepsiho tahu */
+                let startTime = performance.now();
+                let bestMove = this.bot.getBestMove(this.board.copy(), botColor);
+                let endTime = performance.now();
+                console.log('Time: ' + (endTime - startTime) / 1000 + ' s');
+
+                /** bot udela move */
+                this.addPieceToColumn(bestMove, true, botColor);
+                this.gameEnded = this.board.checkWin(addedPiece) || this.board.getPossibleMoves().length == 0;
+                this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece);
+                if (this.gameEnded) {
+                    this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
+                    this.showWinningModal();
+                    return;
+                }
+
+            } else {
+                this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
             }
         } else {
             this.showWinningModal();
@@ -95,17 +110,17 @@ class Game {
         }
     }
 
-    resignGame(){
+    resignGame() {
         if (this.gameEnded) {
             return;
         }
 
         this.gameEnded = true;
-        this.gameResigned = true; 
+        this.gameResigned = true;
         this.showWinningModal();
     }
 
-    startNextGame(){
+    startNextGame() {
         if (!this.gameEnded) {
             return;
         }
@@ -116,7 +131,7 @@ class Game {
         this.gameEnded = false;
         this.gameIsDraw = false;
         this.gameResigned = false;
-        this.initializeStartingPosition(this.board.rows, this.board.cols, playWithBot);
+        this.initializeStartingPosition(this.board.rows, this.board.cols, this.playWithBot);
     }
 
     /**
@@ -143,14 +158,14 @@ class Game {
      * @description Ukáže modal s výsledkem hry
      */
     showWinningModal() {
-        if(!this.gameEnded){
+        if (!this.gameEnded) {
             return;
         }
-        
+
         this.drawCurrentPosition();
         document.getElementById('winning-modal').style.display = 'flex';
-        
-        let gameState = this.gameIsDraw ? ' remízou' : (this.gameResigned ? ' vzdáním hráče ' : '. Vyhrál hráč ')+this.playingPlayer;
+
+        let gameState = this.gameIsDraw ? ' remízou' : (this.gameResigned ? ' vzdáním hráče ' : '. Vyhrál hráč ') + this.playingPlayer;
         document.querySelector('#winning-modal .modal-content').innerHTML = `
         <p>Hra skončila${gameState}</p>`;
     }
