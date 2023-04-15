@@ -12,5 +12,4 @@ function showMessage(message){
 
 window.onload = () => {
     game = new Game(6, 7, true, 'game-area', 'menu');
-    game.drawCurrentPosition();
 }; 

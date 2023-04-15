@@ -47,7 +47,7 @@ class Game {
      * @description Udělá tah a zkontroluje výhru
      * @param {number} col
      */
-    makeMove(col) {
+    async makeMove(col) {
         if (this.gameEnded) {
             return;
         }
@@ -56,6 +56,9 @@ class Game {
         if (!addedPiece) {
             return;
         }
+
+        await this.drawCurrentPosition();
+        console.log(this.drawCurrentPosition());
 
         this.gameEnded = this.board.checkWin(addedPiece) || this.board.getPossibleMoves().length == 0;
         this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece);
@@ -137,7 +140,8 @@ class Game {
     /**
      * @description Vykreslí aktuální pozici
      */
-    drawCurrentPosition() {
+    async drawCurrentPosition() {
+
         this.gameArea.innerHTML = '';
 
         for (let i = 0; i < this.board.cols; i++) {
@@ -149,9 +153,15 @@ class Game {
             document.querySelector(`.col-${piece.col}`).innerHTML += '<div class="row row-' + piece.row + ' ' + fullPiece + '"><img src="./img/' + piece.color + 'Piece.png"></div>';
         });
 
+        
         /** ukaze kdo je na tahu v menu*/
         let playingImgSource = this.gameEnded ? 'empty' : this.playingPlayer;
         this.menu.querySelector('#' + this.menu.id + ' .playing-player-img').setAttribute('src', `./img/${playingImgSource}Piece.png`);
+        await new Promise((resolve, reject) => {
+            setTimeout(() =>{
+                resolve()
+            }, 1);
+        })
     }
 
     /**
