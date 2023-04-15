@@ -11,6 +11,8 @@ class Bot {
             return false;
         }
 
+        this.botColor = botColor;
+
         let bestMove = possibleMoves[0];
         let bestEval = -Infinity;
         for (let i = 0; i < possibleMoves.length; i++) {
@@ -32,8 +34,7 @@ class Bot {
         if (board.checkWin()) {
             return !isMaximizing ? 1 : -1;
         } else if (depth < 1 || board.getPossibleMoves().length == 0) {
-            let playingPlayer = board.getLastPiece().color;
-            return this.evaluateBoard(board, playingPlayer);
+            return this.evaluateBoard(board);
         }
 
 
@@ -78,11 +79,13 @@ class Bot {
     evaluateBoard(board, botColor) {
         let evaluation = 0;
 
-       /* board.pieces.forEach(piece => {
-            let postitiveEval = (-0.001 * Math.abs((board.cols + board.cols % 2) / 2 - piece.col)) + (-0.001 * Math.abs((board.rows + board.rows % 2) / 2 - piece.row));
-            evaluation += playingPlayer == piece.color ? postitiveEval : -1 * postitiveEval;
-        });*/
-        //console.log(+evaluation.toFixed(3));
-        return +evaluation.toFixed(3);
+        board.pieces.forEach(piece => {
+            if (piece.hasColor) {
+                let postitiveEval = (-0.001 * (board.cols - Math.abs((board.cols + board.cols % 2) / 2 - piece.col))) + (-0.001 * (board.rows - Math.abs((board.rows + board.rows % 2) / 2 - piece.row)));
+                postitiveEval *= botColor == piece.color ? 1 : -1;
+                evaluation += postitiveEval;
+            }
+        });
+        return +evaluation.toFixed(4);
     }
 }

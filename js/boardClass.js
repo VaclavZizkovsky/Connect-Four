@@ -41,7 +41,7 @@ class Board {
         }
         
         for (let i = 0; i < this.cols; i++) {
-            if (this.getNewPieceRow(i + 1) != -1) {
+            if (this.getNewPieceRow(i + 1) != 0) {
                 moves.push(i + 1);
             }
         }
@@ -67,7 +67,7 @@ class Board {
             }
         });
 
-        pieceRow = pieceRow == 0 ? -1 : pieceRow;
+        //pieceRow = pieceRow == 0 ? -1 : pieceRow;
         return pieceRow;
     }
 
