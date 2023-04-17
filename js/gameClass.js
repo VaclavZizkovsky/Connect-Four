@@ -1,23 +1,22 @@
 class Game {
-    gameArea;
     playingPlayer;
+    playWithBot = false;
     gameEnded = false;
     gameResigned = false;
     gameIsDraw = false;
+    bot = new Bot();
     oldGames = [];
 
     /**
      * 
      * @param {number} rows 
      * @param {number} cols 
-     * @param {boolean} playWithBot 
-     * @param {*} gameArea 
-     * @param {*} menu 
+     * @param {Array} usersData
      */
-    constructor(rows, cols, playWithBot, gameArea, menu) {
-        this.gameArea = document.getElementById(gameArea);
-        this.menu = document.getElementById(menu);
-        this.initializeStartingPosition(rows, cols, playWithBot);
+    constructor(rows, cols, usersData) {
+        this.gameArea = document.getElementById('game-area');
+        this.usersData = usersData;
+        this.initializeStartingPosition(rows, cols, usersData[0].bot || usersData[1].bot);
     }
 
     /**
@@ -25,12 +24,8 @@ class Game {
      * @param {number} rows 
      * @param {number} cols 
      */
-    initializeStartingPosition(rows, cols, playWithBot) {
-        this.playingPlayer = 'red';
-        this.playWithBot = playWithBot;
-        if (playWithBot) {
-            this.bot = new Bot();
-        }
+    async initializeStartingPosition(rows, cols, playWithBot) {
+        this.playingPlayer = Math.random() > 0.5 ? 'red' : 'blue';
 
         let pieces = [];
         for (let i = 0; i < cols; i++) {
@@ -39,8 +34,14 @@ class Game {
             }
         }
         this.board = new Board(pieces, rows, cols);
-        this.drawCurrentPosition();
-        showMessage('Začíná hráč red');
+        await this.drawCurrentPosition();
+        showMessage('Začíná hráč '+this.playingPlayer);
+
+
+        this.playWithBot = playWithBot;
+        if (playWithBot && ((this.playingPlayer == this.usersData[0].color && this.usersData[0].bot) || (this.playingPlayer == this.usersData[1].color && this.usersData[1].bot))) {
+            this.makeBotMove();
+        }
     }
 
     /**
@@ -48,7 +49,7 @@ class Game {
      * @param {number} col
      */
     async makeMove(col) {
-        if (this.gameEnded) {
+        if (this.gameEnded || this.botCalculating) {
             return;
         }
 
@@ -58,40 +59,53 @@ class Game {
         }
 
         await this.drawCurrentPosition();
-        console.log(this.drawCurrentPosition());
 
         this.gameEnded = this.board.checkWin(addedPiece) || this.board.getPossibleMoves().length == 0;
         this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece);
 
         if (!this.gameEnded) {
-            /** Zapnout bota */
-            if (this.playWithBot) {
-                let botColor = this.playingPlayer == 'red' ? 'blue' : 'red';
-
-                /** hledani nejlepsiho tahu */
-                let startTime = performance.now();
-                let bestMove = this.bot.getBestMove(this.board.copy(), botColor);
-                let endTime = performance.now();
-                console.log('Time: ' + (endTime - startTime) / 1000 + ' s');
-
-                /** bot udela move */
-                this.addPieceToColumn(bestMove, true, botColor);
-                this.gameEnded = this.board.checkWin(addedPiece) || this.board.getPossibleMoves().length == 0;
-                this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece);
-                if (this.gameEnded) {
-                    this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
-                    this.showWinningModal();
-                    return;
-                }
-
-            } else {
-                this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
-            }
+            this.changePlayer();
         } else {
             this.showWinningModal();
         }
 
-        this.drawCurrentPosition();
+    }
+
+    /**
+     * @description udělá move za bota
+     */
+    async makeBotMove() {
+        if (this.playWithBot && !this.gameEnded) {
+            this.botCalculating = true;
+            let addedPiece = this.board.getLastPiece();
+            let botColor = this.playingPlayer;
+
+            /** hledani nejlepsiho tahu */
+            let startTime = performance.now();
+            let bestMove = this.bot.getBestMove(this.board.copy(), botColor);
+            let endTime = performance.now();
+            console.log('Time: ' + (endTime - startTime) / 1000 + ' s');
+
+            /** bot udela move */
+            this.addPieceToColumn(bestMove, true, botColor);
+            this.gameEnded = this.board.checkWin(addedPiece) || this.board.getPossibleMoves().length == 0;
+            this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece);
+            if (this.gameEnded) {
+                this.showWinningModal();
+                return;
+            }
+            this.changePlayer();
+            this.botCalculating = false;
+        }
+    }
+
+    async changePlayer() {
+        this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
+        await this.drawCurrentPosition();
+        if ((this.playingPlayer == this.usersData[0].color && this.usersData[0].bot) || (this.playingPlayer == this.usersData[1].color && this.usersData[1].bot)) {
+            this.makeBotMove();
+        }
+        await this.drawCurrentPosition();
     }
 
     /**
@@ -113,8 +127,11 @@ class Game {
         }
     }
 
+    /**
+     * @description resignuje hru
+     */
     resignGame() {
-        if (this.gameEnded) {
+        if (this.gameEnded || this.botCalculating) {
             return;
         }
 
@@ -153,13 +170,14 @@ class Game {
             document.querySelector(`.col-${piece.col}`).innerHTML += '<div class="row row-' + piece.row + ' ' + fullPiece + '"><img src="./img/' + piece.color + 'Piece.png"></div>';
         });
 
-        
+
         /** ukaze kdo je na tahu v menu*/
         let playingImgSource = this.gameEnded ? 'empty' : this.playingPlayer;
-        this.menu.querySelector('#' + this.menu.id + ' .playing-player-img').setAttribute('src', `./img/${playingImgSource}Piece.png`);
+        document.querySelector('#menu .playing-player-img').setAttribute('src', `./img/${playingImgSource}Piece.png`);
+        console.log(this.playingPlayer);
         await new Promise((resolve, reject) => {
-            setTimeout(() =>{
-                resolve()
+            setTimeout(() => {
+                resolve();
             }, 1);
         })
     }
@@ -173,10 +191,8 @@ class Game {
         }
 
         this.drawCurrentPosition();
-        document.getElementById('winning-modal').style.display = 'flex';
 
         let gameState = this.gameIsDraw ? ' remízou' : (this.gameResigned ? ' vzdáním hráče ' : '. Vyhrál hráč ') + this.playingPlayer;
-        document.querySelector('#winning-modal .modal-content').innerHTML = `
-        <p>Hra skončila${gameState}</p>`;
+        showMessage('Hra skončila' + gameState);
     }
 }

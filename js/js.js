@@ -1,6 +1,6 @@
 var game;
 
-function showMessage(message){
+function showMessage(message) {
     document.querySelector("#message-snackbar").innerHTML = message;
     document.querySelector("#message-snackbar").className = 'showed';
 
@@ -9,7 +9,17 @@ function showMessage(message){
     }, 3000)
 }
 
+let users = [
+    {
+        color: 'red',
+        name: 'Razdva',
+        bot: true,
+    }, {
+        color: 'blue',
+        name: 'Bot',
+        bot: false,
+    }
+];
 
-window.onload = () => {
-    game = new Game(6, 7, true, 'game-area', 'menu');
-}; 
+
+game = new Game(6, 7, users);

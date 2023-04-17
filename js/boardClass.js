@@ -67,7 +67,6 @@ class Board {
             }
         });
 
-        //pieceRow = pieceRow == 0 ? -1 : pieceRow;
         return pieceRow;
     }
 
