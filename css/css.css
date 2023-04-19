@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+
 :root {
     --background: #1D263B;
     --menu-background: #5C6784;
     --menu-font-size: 60px;
     --message-background: rgb(53, 63, 63);
     --box-shadow: rgba(243, 243, 243, 0.527) 0px 0px 30px;
+    --sidebar-width: 25vw;
 }
 
 *,
@@ -15,19 +18,23 @@
 
 #game-area {
     background-color: var(--background);
-    width: 100vw;
-    height: 100vh;
+    max-width: 90vw;
+    height: 96vh;
+    overflow: hidden;
     display: flex;
     justify-content: space-around;
     align-self: center;
+    box-shadow: var(--box-shadow);
+    border-radius: 30px;
 }
 
 #game-area .col {
-    width: 10vw;
+    max-width: 10vw;
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: space-around;
+    margin: 0 1vw;
 }
 
 #game-area .col:hover {
@@ -60,9 +67,13 @@ button {
     width: var(--menu-font-size);
 }
 
+#game-area .col .row {
+    margin: 0 1vw;
+}
+
 #game-area .col .row img {
     max-height: 10vh;
-    max-width: 10vw;
+    max-width: 7vw;
     user-select: none;
     border-radius: 10vw;
     border: 3px solid #8460f1;
@@ -73,46 +84,63 @@ button {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 0;
     margin: 0;
     overflow-x: hidden;
     display: flex;
-    justify-content: center;
-
-}
-
-.modal {
-    color: white;
-    display: none;
-    background-color: var(--message-background);
-    text-align: center;
-    flex-direction: column;
     justify-content: space-between;
-    box-shadow: var(--box-shadow);
-    animation: fadeIn 0.5s;
-
-
-    /* width and height params, centering */
-    width: 500px;
-    height: 300px;
-    top: calc(50vh - 150px);
-    left: calc(50vw + 10px - 250px + (var(--menu-font-size) / 2));
-    position: absolute;
-    z-index: 2;
+    background: var(--background);
+    font-family: 'Comfortaa', cursive;
 }
 
-.modal .close {
-    cursor: pointer;
-    font-size: 20px;
-    position: absolute;
-    inset: 20px 20px auto auto;
-}
-
-.modal .modal-footer {
+#game-info {
+    min-width: var(--sidebar-width);
+    height: 100vh;
+    color: white;
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 15px;
+    flex-direction: column;
+}
+
+
+.game-score,
+.players-info,
+.moves-info {
+    margin-top: 40px;
+}
+
+.game-score {
+    text-align: center;
+    font-size: 50px;
+}
+
+.players-info {
+    font-size: 50px
+}
+
+.player-info:nth-child(2) {
+    margin-top: 20px;
+}
+
+.player-info span {
+    font-size: 35px;
+    display: inline;
+}
+
+.player-info img {
+    max-width: 40px;
+}
+
+.moves-info {
+    text-align: center;
+}
+
+.moves-info>span {
+    font-size: 30px;
+}
+
+.moves-info table {
+    text-align: center;
+    width: var(--sidebar-width);
 }
 
 .modal-footer button {
@@ -125,8 +153,9 @@ body {
     visibility: hidden;
     position: absolute;
     text-align: center;
-    min-width: 400px !important;
+    min-width: 500px !important;
     top: 100px;
+    left: calc(50vw - 250px);
     background-color: var(--message-background);
     padding: 20px 20px;
     z-index: 2;

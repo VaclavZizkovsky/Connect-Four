@@ -12,12 +12,12 @@ function showMessage(message) {
 let users = [
     {
         color: 'red',
-        name: 'Razdva',
-        bot: true,
+        name: 'Franta Vomáčka',
+        bot: false,
     }, {
         color: 'blue',
         name: 'Bot',
-        bot: false,
+        bot: true,
     }
 ];
 

@@ -34,8 +34,14 @@ class Game {
             }
         }
         this.board = new Board(pieces, rows, cols);
+
+
+        document.querySelector('#red-info span').innerHTML = this.usersData[0].color == 'red' ? this.usersData[0].name : this.usersData[1].name;
+        document.querySelector('#blue-info span').innerHTML = this.usersData[0].color == 'blue' ? this.usersData[0].name : this.usersData[1].name;
+        document.querySelector('.beginning-player').innerHTML = this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name;
+        document.querySelector('.ending-player').innerHTML = this.usersData[0].color == this.playingPlayer ? this.usersData[1].name : this.usersData[0].name;
+        showMessage('Začíná hráč ' + this.playingPlayer);
         await this.drawCurrentPosition();
-        showMessage('Začíná hráč '+this.playingPlayer);
 
 
         this.playWithBot = playWithBot;
@@ -171,10 +177,31 @@ class Game {
         });
 
 
+        /** vypíše pohyby do side baru */
+        let movesHTML = '';
+        for (let i = 0; i < this.board.moves.length || (this.gameEnded && i <= this.board.moves.length); i++) {
+            if (this.gameEnded && (this.board.moves.length == i)) {
+                let beginningPlayerName = document.querySelector('.beginning-player').innerHTML;
+                /** prosím nešahej na to NIKDY NIKDY jinak se to celý zboří díky moc */
+                let player1Won = this.gameResigned ? (this.playingPlayer == (!this.usersData[0].name == beginningPlayerName ? this.usersData[0].color : this.usersData[1].color)) : (this.playingPlayer == (this.usersData[0].name == beginningPlayerName ? this.usersData[0].color : this.usersData[1].color));
+                let gameResult = this.gameIsDraw ? '0.5 – 0.5' : (player1Won ? '1 – 0' : '0 – 1');
+                movesHTML += i % 2 == 0 ? `<tr><td>${i / 2 + 1}</td><td>${gameResult}</td>` : `<td>${gameResult}</td></tr>`;
+                continue;
+            }
+            if (i % 2 == 0) {
+                movesHTML += '<tr><td>' + (i / 2 + 1) + '</td><td>' + this.board.moves[i] + '</td>';
+            } else {
+                movesHTML += '<td>' + this.board.moves[i] + '</td></tr>';
+            }
+        }
+        document.querySelector('#moves table tbody').innerHTML = movesHTML + '</tr>';
+
+
         /** ukaze kdo je na tahu v menu*/
         let playingImgSource = this.gameEnded ? 'empty' : this.playingPlayer;
         document.querySelector('#menu .playing-player-img').setAttribute('src', `./img/${playingImgSource}Piece.png`);
-        console.log(this.playingPlayer);
+
+        /** počká 1 ms, takže se promítnou změny v HTML */
         await new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve();

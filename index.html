@@ -23,7 +23,7 @@
 
 <body>
     <div id="menu">
-        <button title="Barva hráče na tahu">
+        <button title="Hráč na tahu">
             <img class="playing-player-img" src="./img/redPiece.png">
         </button>
         <button title="Vzdát hru" onclick="game.resignGame();">
@@ -50,25 +50,39 @@
     <div id="game-area">
     </div>
 
-    <div id="winning-modal" class="modal">
-        <i class="fa-solid fa-xmark close" onclick="this.parentElement.style.display = 'none';"></i>
-        <div class="modal-header">
-            <h1>Konec hry</h1>
+    <div id="game-info">
+        <div class="game-score">
+            <span>0&nbsp;&nbsp;–&nbsp;&nbsp;0</span>
         </div>
-
-        <div class="modal-content">
-            
+        <div class="players-info">
+            <div id="red-info" class="player-info">
+                <img src="./img/redPiece.png">&nbsp;
+                <span>Hráč 1</span>
+            </div>
+            <div id="blue-info" class="player-info">
+                <img src="./img/bluePiece.png">&nbsp;
+                <span>Hráč 2</span>
+            </div>
         </div>
+        <div class="moves-info">
+            <span>Tahy</span><br /><br />
+            <div id="moves">
+                <table>
+                    <thead>
+                        <th>#</th>
+                        <th class="beginning-player">Červený</th>
+                        <th class="ending-player">Modrý</th>
+                    </thead>
+                    <tbody>
 
-        <div class="modal-footer">
-            <button title="Další hra" onclick="game.startNextGame()"><i class="fa-solid fa-forward"></i></button>
-            <button><i class="fa-solid fa-compass"></i></button>
-            <button><i class="fa-solid fa-share"></i></button>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <div id="message-snackbar">
-        msg
+        Error
     </div>
 
 </body>
