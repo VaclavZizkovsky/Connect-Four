@@ -55,7 +55,7 @@ class Game {
      * @param {number} col
      */
     async makeMove(col) {
-        if (this.gameEnded || this.botCalculating) {
+        if (this.gameEnded || this.botCalculating || !this.board.latestPosition) {
             return;
         }
 
@@ -81,7 +81,7 @@ class Game {
      * @description udělá move za bota
      */
     async makeBotMove() {
-        if (this.playWithBot && !this.gameEnded) {
+        if (this.playWithBot && !this.gameEnded && this.board.latestPosition) {
             this.botCalculating = true;
             let addedPiece = this.board.getLastPiece();
             let botColor = this.playingPlayer;
@@ -151,13 +151,29 @@ class Game {
             return;
         }
 
-        document.getElementById('winning-modal').style.display = 'none';
+        document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-flag"></i>';
+        document.querySelector('.resign-button').setAttribute('onclick', 'game.resignGame();');
 
-        this.oldGames.push(this.board.moves);
+
         this.gameEnded = false;
         this.gameIsDraw = false;
         this.gameResigned = false;
         this.initializeStartingPosition(this.board.rows, this.board.cols, this.playWithBot);
+    }
+
+    displayMove(moveID) {
+        if (moveID == 'next') {
+            moveID = this.board.latestPosition ? this.board.displayedMove : this.board.displayedMove + 1;
+        } else if (moveID == 'previous') {
+            if (this.board.displayedMove > 1) {
+                moveID = this.board.displayedMove - 1;
+            } else {
+                return;
+            }
+        }
+        let startingPlayer = this.board.moves.length % 2 == 0 ? this.playingPlayer : (this.playingPlayer == 'red' ? 'blue' : 'red');
+        this.board.getMovePosition(moveID, startingPlayer);
+        this.drawCurrentPosition();
     }
 
     /**
@@ -165,6 +181,7 @@ class Game {
      */
     async drawCurrentPosition() {
 
+        /** vykreslí board */
         this.gameArea.innerHTML = '';
 
         for (let i = 0; i < this.board.cols; i++) {
@@ -189,17 +206,18 @@ class Game {
                 continue;
             }
             if (i % 2 == 0) {
-                movesHTML += '<tr><td>' + (i / 2 + 1) + '</td><td>' + this.board.moves[i] + '</td>';
+                movesHTML += '<tr><td>' + (i / 2 + 1) + '</td><td class="move ' + ((i + 1) == this.board.displayedMove ? 'displayed-move' : '') + '" onclick="game.displayMove(' + (i + 1) + ');">' + this.board.moves[i] + '</td>';
             } else {
-                movesHTML += '<td>' + this.board.moves[i] + '</td></tr>';
+                movesHTML += '<td class="move ' + ((i + 1) == this.board.displayedMove ? 'displayed-move' : '') + '" onclick="game.displayMove(' + (i + 1) + ');">' + this.board.moves[i] + '</td></tr>';
             }
         }
         document.querySelector('#moves table tbody').innerHTML = movesHTML + '</tr>';
 
+        /** vykreslí skóre */
+        document.querySelector('.game-score span').innerHTML = `${this.usersData[0].score}&nbsp;&nbsp;–&nbsp;&nbsp;${this.usersData[1].score}`;
 
         /** ukaze kdo je na tahu v menu*/
-        let playingImgSource = this.gameEnded ? 'empty' : this.playingPlayer;
-        document.querySelector('#menu .playing-player-img').setAttribute('src', `./img/${playingImgSource}Piece.png`);
+        document.querySelector('#menu .playing-player-img').setAttribute('src', `./img/${this.playingPlayer}Piece.png`);
 
         /** počká 1 ms, takže se promítnou změny v HTML */
         await new Promise((resolve, reject) => {
@@ -217,7 +235,17 @@ class Game {
             return;
         }
 
+        this.oldGames.push(this.board.moves);
+        /** update skóre 
+         *  prosím nešahej na to NIKDY NIKDY jinak se to celý zboří díky moc
+         *  */
+        let player1Won = this.gameResigned ? !(this.playingPlayer == this.usersData[0].color) : (this.playingPlayer == this.usersData[0].color);
+        this.usersData[0].score += this.gameIsDraw ? 0.5 : (player1Won ? 1 : 0);
+        this.usersData[1].score += this.gameIsDraw ? 0.5 : (player1Won ? 0 : 1);
+
         this.drawCurrentPosition();
+        document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-forward"></i>';
+        document.querySelector('.resign-button').setAttribute('onclick', 'game.startNextGame();');
 
         let gameState = this.gameIsDraw ? ' remízou' : (this.gameResigned ? ' vzdáním hráče ' : '. Vyhrál hráč ') + this.playingPlayer;
         showMessage('Hra skončila' + gameState);

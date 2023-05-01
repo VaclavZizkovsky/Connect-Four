@@ -14,10 +14,12 @@ let users = [
         color: 'red',
         name: 'Franta Vomáčka',
         bot: false,
+        score: 0,
     }, {
         color: 'blue',
         name: 'Bot',
-        bot: true,
+        bot: false,
+        score: 0
     }
 ];
 

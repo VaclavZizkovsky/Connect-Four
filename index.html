@@ -26,9 +26,9 @@
         <button title="Hráč na tahu">
             <img class="playing-player-img" src="./img/redPiece.png">
         </button>
-        <button title="Vzdát hru" onclick="game.resignGame();">
+        <button class="resign-button" title="Vzdát hru" onclick="game.resignGame();">
             <i class="fa-solid fa-flag"></i>
-        </button>
+        </button><!--
         <button title="Zapnout/vypnout bota">
             <i class="fa-solid fa-robot"></i><br />
             <i class="fa-solid fa-toggle-on"></i>
@@ -38,7 +38,7 @@
         </button>
         <button title="Zobrazit statistiky">
             <i class="fa-solid fa-chart-line"></i>
-        </button>
+        </button>-->
         <button title="Nastavení hry">
             <i class="fa-solid fa-gear"></i>
         </button>
@@ -77,6 +77,11 @@
 
                     </tbody>
                 </table>
+                <br /><br />
+                <div class="move-buttons">
+                    <button onclick="game.displayMove('previous')"><i class="fa-solid fa-angle-left"></i></button>
+                    <button onclick="game.displayMove('next')"><i class="fa-solid fa-angle-right"></i></button>
+                </div>
             </div>
         </div>
     </div>

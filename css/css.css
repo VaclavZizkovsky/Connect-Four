@@ -19,7 +19,7 @@
 #game-area {
     background-color: var(--background);
     max-width: 90vw;
-    height: 96vh;
+    height: 90vh;
     overflow: hidden;
     display: flex;
     justify-content: space-around;
@@ -91,6 +91,7 @@ body {
     justify-content: space-between;
     background: var(--background);
     font-family: 'Comfortaa', cursive;
+    color: white;
 }
 
 #game-info {
@@ -143,9 +144,25 @@ body {
     width: var(--sidebar-width);
 }
 
-.modal-footer button {
-    font-size: 30px;
+.move-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.move-buttons button {
     color: white;
+}
+
+td.move {
+    cursor: pointer;
+}
+
+td.move:hover {
+    text-decoration: underline;
+}
+
+.displayed-move {
+    text-decoration: underline;
 }
 
 #message-snackbar {

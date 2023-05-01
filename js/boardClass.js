@@ -3,6 +3,9 @@
  */
 class Board {
     moves = [];
+    latestPosition = true;
+    displayedMove = 0;
+
 
     /**
      * 
@@ -26,6 +29,7 @@ class Board {
             if (piece.col == this.pieces[i].col && piece.row == this.pieces[i].row) {
                 this.pieces.splice(i, 1, piece);
                 this.moves.push(piece.col);
+                this.displayedMove = this.moves.length;
             }
         }
     }
@@ -36,10 +40,10 @@ class Board {
      */
     getPossibleMoves() {
         let moves = [];
-        if(this.checkWin()){
+        if (this.checkWin()) {
             return moves;
         }
-        
+
         for (let i = 0; i < this.cols; i++) {
             if (this.getNewPieceRow(i + 1) != 0) {
                 moves.push(i + 1);
@@ -118,8 +122,34 @@ class Board {
         return samePiecesInDirection;
     }
 
-    getLastPiece(){
-        if(!this.moves.length >= 1){
+    getMovePosition(moveID, startingPlayer) {
+        let boardCopy = this.copy();
+        let pieces = [];
+        for (let i = 0; i < this.cols; i++) {
+            for (let j = 0; j < this.rows; j++) {
+                pieces.push(new Piece(false, 'empty', j + 1, i + 1));
+            }
+        }
+        boardCopy.pieces = pieces;
+
+        boardCopy.moves = this.moves.slice(0, moveID);
+        boardCopy.moves.forEach(move => {
+            let pieceRow = boardCopy.getNewPieceRow(move);
+
+            if (pieceRow > 0) {
+                let piece = new Piece(true, startingPlayer, pieceRow, move);
+                boardCopy.addPiece(piece);
+                startingPlayer = startingPlayer == 'red' ? 'blue' : 'red';
+            }
+        });
+
+        this.pieces = boardCopy.pieces;
+        this.latestPosition = this.moves.length == boardCopy.moves.length / 2;
+        this.displayedMove = boardCopy.moves.length / 2;
+    }
+
+    getLastPiece() {
+        if (!this.moves.length >= 1) {
             return false;
         }
 
