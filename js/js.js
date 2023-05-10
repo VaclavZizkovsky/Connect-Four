@@ -24,4 +24,4 @@ let users = [
 ];
 
 
-game = new Game(6, 7, users);
+// game = new Game(6, 7, users);

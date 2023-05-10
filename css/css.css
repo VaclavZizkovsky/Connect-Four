@@ -16,6 +16,21 @@
 }
 
 
+body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--background);
+    font-family: 'Comfortaa', cursive;
+    color: white;
+}
+
+#game {
+    display: none;
+    /* display: flex; */
+    justify-content: space-between;
+}
+
 #game-area {
     background-color: var(--background);
     max-width: 90vw;
@@ -81,17 +96,6 @@ button {
 
 #game-area .col .row.full img {
     border: 0;
-}
-
-body {
-    padding: 0;
-    margin: 0;
-    overflow-x: hidden;
-    display: flex;
-    justify-content: space-between;
-    background: var(--background);
-    font-family: 'Comfortaa', cursive;
-    color: white;
 }
 
 #game-info {
@@ -183,6 +187,119 @@ td.move:hover {
 #message-snackbar.showed {
     visibility: visible;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+
+#usernames-input {
+    display: flex;
+    position: relative;
+    top: 30vh;
+    justify-content: space-around;
+}
+
+.username-input {
+    text-align: center;
+}
+
+.username-input input {
+    padding: 10px;
+    font-size: 20px;
+    font-family: 'Comfortaa';
+    border-radius: 5px;
+}
+
+.username-input input:focus {
+    border: 2px solid #8460f1;
+}
+
+.username-input .switcher {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.username-input .switcher i {
+    font-size: 40px;
+    margin-right: 20px;
+}
+
+.username-input label {
+    background-color: var(--menu-background);
+    width: 60px;
+    height: 35px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.username-input label .slider {
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    transition: .2s;
+    border-radius: 200px;
+}
+
+/* nějaká magie */
+.username-input label input:checked+.slider {
+    transform: translateX(25px);
+}
+
+.username-input label:has(input:checked) {
+    background-color: #8460f1;
+}
+
+.username-input label input {
+    display: none;
+}
+
+#start-button {
+    position: absolute;
+    top: 200px;
+    background: #8460f1;
+    color: white;
+    border-radius: 20vw;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 110px;
+    aspect-ratio: 1 / 1;
+    transition: .2s;
+}
+
+#start-button:hover {
+    background: #5c39c4;
+}
+
+.bottom-options {
+    width: 30vw;
+    left: 35vw;
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    top: calc(30vh + 320px);
+}
+
+.bottom-option button {
+    font-size: 40px;
+    color: white;
+    padding: 10px;
+}
+
+.bottom-option button:hover {
+    font-size: 60px;
+    transition: .2s;
+    padding: 0;
+}
+
+#copyright {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
 }
 
 @keyframes fadeIn {
