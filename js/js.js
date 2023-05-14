@@ -54,4 +54,17 @@ function leaveGame() {
 }
 
 
-// game = new Game(6, 7, users);
+window.addEventListener('keydown', (e) => {
+    if (!inGame) {
+        return;
+    }
+
+    if (e.key == 'ArrowRight') {
+        game.displayMove('next');
+    }
+
+    if (e.key == 'ArrowLeft') {
+        game.displayMove('previous');
+    }
+});
+
