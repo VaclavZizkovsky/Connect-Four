@@ -1,14 +1,4 @@
 var game;
-
-function showMessage(message) {
-    document.querySelector("#message-snackbar").innerHTML = message;
-    document.querySelector("#message-snackbar").className = 'showed';
-
-    setTimeout(() => {
-        document.querySelector("#message-snackbar").className = document.querySelector("#message-snackbar").className.replace('showed', '');
-    }, 3000)
-}
-
 let users = [
     {
         color: 'red',
@@ -22,6 +12,46 @@ let users = [
         score: 0
     }
 ];
+let inGame = false;
+
+
+function showMessage(message) {
+    document.querySelector("#message-snackbar").innerHTML = message;
+    document.querySelector("#message-snackbar").className = 'showed';
+
+    setTimeout(() => {
+        document.querySelector("#message-snackbar").className = document.querySelector("#message-snackbar").className.replace('showed', '');
+    }, 3000)
+}
+
+function enterGame() {
+    users[0].name = document.querySelector('#username1').value;
+    users[1].name = document.querySelector('#username2').value;
+
+    users[0].bot = document.querySelector('#bot-select1').checked;
+    users[1].bot = document.querySelector('#bot-select2').checked;
+
+    document.querySelector('#start').style.display = 'none';
+    document.querySelector('#game').style.display = 'flex';
+    inGame = true;
+    game = new Game(6, 7, users);
+}
+
+function leaveGame() {
+    if (!inGame) {
+        showMessage('Zkurvenej bug jak je to možný že se tohle stane');
+        return;
+    }
+    if (!game.gameEnded) {
+        showMessage('Nelze odejít v probíhající hře');
+        return;
+    }
+
+    document.querySelector('#start').style.display = 'block';
+    document.querySelector('#game').style.display = 'none';
+    inGame = false;
+    game = null;
+}
 
 
 // game = new Game(6, 7, users);

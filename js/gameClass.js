@@ -35,6 +35,8 @@ class Game {
         }
         this.board = new Board(pieces, rows, cols);
 
+        document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-flag"></i>';
+        document.querySelector('.resign-button').setAttribute('onclick', 'game.resignGame();');
 
         document.querySelector('#red-info span').innerHTML = this.usersData[0].color == 'red' ? this.usersData[0].name : this.usersData[1].name;
         document.querySelector('#blue-info span').innerHTML = this.usersData[0].color == 'blue' ? this.usersData[0].name : this.usersData[1].name;
@@ -151,8 +153,6 @@ class Game {
             return;
         }
 
-        document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-flag"></i>';
-        document.querySelector('.resign-button').setAttribute('onclick', 'game.resignGame();');
 
 
         this.gameEnded = false;
@@ -172,6 +172,7 @@ class Game {
             }
         }
         let startingPlayer = this.board.moves.length % 2 == 0 ? this.playingPlayer : (this.playingPlayer == 'red' ? 'blue' : 'red');
+        startingPlayer = this.gameEnded && !this.gameResigned ? (startingPlayer == 'red' ? 'blue' : 'red') : startingPlayer;
         this.board.getMovePosition(moveID, startingPlayer);
         this.drawCurrentPosition();
     }
