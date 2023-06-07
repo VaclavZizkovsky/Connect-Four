@@ -74,6 +74,14 @@ class Game {
         if (!this.gameEnded) {
             this.changePlayer();
         } else {
+            if (!this.gameIsDraw) {
+                this.board.pieces.forEach(piece => {
+                    if (piece.hasColor) {
+                        this.board.highlightPieces(piece);
+                        return;
+                    }
+                });
+            }
             this.showWinningModal();
         }
 
@@ -99,11 +107,19 @@ class Game {
             this.gameEnded = this.board.checkWin(addedPiece) || this.board.getPossibleMoves().length == 0;
             this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece);
             if (this.gameEnded) {
+                if (!this.gameIsDraw) {
+                    this.board.pieces.forEach(piece => {
+                        if (piece.hasColor) {
+                            this.board.highlightPieces(piece);
+                            return;
+                        }
+                    });
+                }
                 this.showWinningModal();
                 return;
             }
-            this.changePlayer();
             this.botCalculating = false;
+            this.changePlayer();
         }
     }
 
@@ -161,6 +177,11 @@ class Game {
         this.initializeStartingPosition(this.board.rows, this.board.cols, this.playWithBot);
     }
 
+    /**
+     * @description zobrazí na desce nějaký tah v probíhající hře
+     * @param {Number} moveID číslo tahu který se má zobrazit 
+     * @returns 
+     */
     displayMove(moveID) {
         if (moveID == 'next') {
             moveID = this.board.latestPosition ? this.board.displayedMove : this.board.displayedMove + 1;

@@ -122,6 +122,70 @@ class Board {
         return samePiecesInDirection;
     }
 
+    /**
+     * @description změní v board.pieces zdroj obrázku výherních žetonů – přidá W (jako výhra) 
+     * @param {Piece} piece žeton 
+     * @returns false pokud selhalo, true pokud něco změnil
+     */
+    highlightPieces(piece) {
+        let horizontalIncrements = [];
+        let verticalIncrements = [];
+
+        let winDirection = (this.samePiecesInDirection(piece, 0, 1) + this.samePiecesInDirection(piece, 0, -1)) > 4 ? 'vertical' : '';
+        winDirection = (this.samePiecesInDirection(piece, 1, 0) + this.samePiecesInDirection(piece, -1, 0)) > 4 ? 'horizontal' : winDirection;
+        winDirection = (this.samePiecesInDirection(piece, 1, 1) + this.samePiecesInDirection(piece, -1, -1)) > 4 ? 'diagonal1' : winDirection;
+        winDirection = (this.samePiecesInDirection(piece, -1, 1) + this.samePiecesInDirection(piece, 1, -1)) > 4 ? 'diagonal2' : winDirection;
+
+        switch (winDirection) {
+            case 'vertical':
+                horizontalIncrements.push(0);
+                horizontalIncrements.push(0);
+                verticalIncrements.push(1);
+                verticalIncrements.push(-1);
+                break;
+            case 'horizontal':
+                horizontalIncrements.push(1);
+                horizontalIncrements.push(-1);
+                verticalIncrements.push(0);
+                verticalIncrements.push(0);
+                break;
+            case 'diagonal1':
+                horizontalIncrements.push(1);
+                horizontalIncrements.push(-1);
+                verticalIncrements.push(1);
+                verticalIncrements.push(-1);
+                break;
+            case 'diagonal2':
+                horizontalIncrements.push(-1);
+                horizontalIncrements.push(1);
+                verticalIncrements.push(1);
+                verticalIncrements.push(-1);
+                break;
+            default:
+                return false;
+        }
+
+        /** moc na to nesahej */
+        for (let k = 0; k < 2; k++) {
+            let verticalIncrement = verticalIncrements[k];
+            let horizontalIncrement = horizontalIncrements[k]
+            let i = piece.row;
+            let j = piece.col;
+
+            while (i <= this.rows && i > 0 && j > 0 && j <= this.cols) {
+                let nextPiece = this.findPiece(i, j);
+                if (!nextPiece || !(nextPiece.hasColor && (nextPiece.color == piece.color || nextPiece.color + 'W' == piece.color))) {
+                    break;
+                } else {
+                    nextPiece.color += (nextPiece.color == 'blue' || nextPiece.color == 'red') ? 'W' : '';
+                }
+                i += verticalIncrement;
+                j += horizontalIncrement;
+            }
+        }
+        return true;
+    }
+
     getMovePosition(moveID, startingPlayer) {
         let boardCopy = this.copy();
         let pieces = [];
@@ -139,20 +203,36 @@ class Board {
             if (pieceRow > 0) {
                 let piece = new Piece(true, startingPlayer, pieceRow, move);
                 boardCopy.addPiece(piece);
+                /** zabrání duplikaci a dvojnásobné délce pole moves (způsobeno board.addPiece)*/
+                boardCopy.moves.pop();
                 startingPlayer = startingPlayer == 'red' ? 'blue' : 'red';
             }
         });
 
+
+        /** zvýraznění win žetonů */
+        if (boardCopy.checkWin()) {
+            boardCopy.pieces.forEach(piece => {
+                if (piece.hasColor) {
+                    boardCopy.highlightPieces(piece);
+                    return;
+                }
+            });
+        }
+
         this.pieces = boardCopy.pieces;
-        this.latestPosition = this.moves.length == boardCopy.moves.length / 2;
-        this.displayedMove = boardCopy.moves.length / 2;
+        this.latestPosition = this.moves.length == boardCopy.moves.length
+        this.displayedMove = boardCopy.moves.length;
     }
 
+    /**
+     * @description hledá žeton, který byl přidaný v posledním tahu
+     * @returns nalezený žeton, když nenajde => false
+     */
     getLastPiece() {
         if (!this.moves.length >= 1) {
             return false;
         }
-
         return this.findPiece(this.getNewPieceRow(this.moves[this.moves.length - 1]) + 1, this.moves[this.moves.length - 1]);
     }
 
@@ -173,6 +253,10 @@ class Board {
         return foundPiece;
     }
 
+    /**
+     * @description udělá deep kopii boardu
+     * @returns {Board} kopie boardu
+     */
     copy() {
         let newBoard = new Board([], this.rows, this.cols);
         newBoard.pieces = structuredClone(this.pieces);
