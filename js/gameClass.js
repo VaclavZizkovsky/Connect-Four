@@ -42,7 +42,7 @@ class Game {
         document.querySelector('#blue-info span').innerHTML = this.usersData[0].color == 'blue' ? this.usersData[0].name : this.usersData[1].name;
         document.querySelector('.beginning-player').innerHTML = this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name;
         document.querySelector('.ending-player').innerHTML = this.usersData[0].color == this.playingPlayer ? this.usersData[1].name : this.usersData[0].name;
-        showMessage('Začíná hráč ' + this.playingPlayer);
+        showMessage('Začíná hráč ' + (this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name));
         await this.drawCurrentPosition();
 
 
@@ -273,7 +273,8 @@ class Game {
         document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-forward"></i>';
         document.querySelector('.resign-button').setAttribute('onclick', 'game.startNextGame();');
 
-        let gameState = this.gameIsDraw ? ' remízou' : (this.gameResigned ? ' vzdáním hráče ' : '. Vyhrál hráč ') + this.playingPlayer;
+        let player = this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name;
+        let gameState = this.gameIsDraw ? ' remízou' : (this.gameResigned ? ' vzdáním hráče ' : '. Vyhrál hráč ') + player;
         showMessage('Hra skončila' + gameState);
     }
 }
