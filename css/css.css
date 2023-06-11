@@ -212,6 +212,11 @@ td.move:hover {
     border: 3px solid #8460f1;
 }
 
+.username-input input:disabled {
+    border: 0;
+    cursor: not-allowed;
+}
+
 .username-input .switcher {
     display: flex;
     align-items: center;

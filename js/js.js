@@ -68,3 +68,11 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+function disableUsernameInput(input) {
+    if (!document.querySelector('#bot-select' + input).checked) {
+        document.querySelector('#username' + input).removeAttribute('disabled')
+    } else {
+        document.querySelector('#username' + input).setAttribute('disabled', "1");
+        document.querySelector('#username' + input).value = "Bot";
+    }
+}
