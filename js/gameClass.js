@@ -183,6 +183,10 @@ class Game {
      * @returns 
      */
     displayMove(moveID) {
+        /** zabrání zobrazení předchozích tahů, když hrajou dva boti => přerušilo by to je a hra by se nedohrála */
+        if (this.usersData[0].bot && this.usersData[1].bot && !this.gameEnded) {
+            return;
+        }
         if (moveID == 'next') {
             moveID = this.board.latestPosition ? this.board.displayedMove : this.board.displayedMove + 1;
         } else if (moveID == 'previous') {
