@@ -6,7 +6,7 @@
     --menu-font-size: 60px;
     --message-background: rgb(53, 63, 63);
     --box-shadow: rgba(243, 243, 243, 0.527) 0px 0px 30px;
-    --sidebar-width: 25vw;
+    --sidebar-width: 20vw;
 }
 
 *,
@@ -20,6 +20,7 @@ body {
     padding: 0;
     margin: 0;
     overflow-x: hidden;
+    overflow-y: hidden;
     background: var(--background);
     font-family: 'Comfortaa', cursive;
     color: white;
@@ -33,7 +34,7 @@ body {
 
 #game-area {
     background-color: var(--background);
-    max-width: 90vw;
+    max-width: 70vw;
     height: 90vh;
     overflow: hidden;
     display: flex;
@@ -44,12 +45,12 @@ body {
 }
 
 #game-area .col {
-    max-width: 10vw;
+    max-width: 9vw;
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: space-around;
-    margin: 0 1vw;
+    margin: 0 0.5vw;
 }
 
 #game-area .col:hover {
@@ -83,12 +84,12 @@ button {
 }
 
 #game-area .col .row {
-    margin: 0 1vw;
+    margin: 0 0.5vw;
 }
 
 #game-area .col .row img {
     max-height: 10vh;
-    max-width: 7vw;
+    max-width: 7.5vw;
     user-select: none;
     border-radius: 10vw;
     border: 3px solid #8460f1;
@@ -119,7 +120,7 @@ button {
 }
 
 .players-info {
-    font-size: 50px
+    font-size: 50px;
 }
 
 .player-info:nth-child(2) {
@@ -137,6 +138,8 @@ button {
 
 .moves-info {
     text-align: center;
+    max-height: 65vh;
+    overflow-y: scroll;
 }
 
 .moves-info>span {
