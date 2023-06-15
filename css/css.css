@@ -27,6 +27,11 @@ body {
     color: white;
 }
 
+img {
+    user-select: none;
+    pointer-events: none;
+}
+
 #game {
     display: none;
     /* display: flex; */
