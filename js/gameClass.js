@@ -98,7 +98,8 @@ class Game {
 
             /** hledani nejlepsiho tahu */
             let startTime = performance.now();
-            let bestMove = this.bot.getBestMove(this.board.copy(), botColor);
+            let bestMove = this.bot.minimax(this.board.copy(), this.bot.depth, true, -Infinity, +Infinity);
+            console.log(bestMove);
             let endTime = performance.now();
             console.log('Time: ' + (endTime - startTime) / 1000 + ' s');
 

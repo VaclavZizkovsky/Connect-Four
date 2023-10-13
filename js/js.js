@@ -51,6 +51,8 @@ function leaveGame() {
     document.querySelector('#game').style.display = 'none';
     inGame = false;
     game = null;
+    users[0].score = 0;
+    users[1].score = 0;
 }
 
 
