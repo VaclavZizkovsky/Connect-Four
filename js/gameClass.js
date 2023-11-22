@@ -262,6 +262,9 @@ class Game {
             return;
         }
 
+        /** uloží statistiky */
+        this.saveStats();
+
         this.oldGames.push(this.board.moves);
         /** update skóre 
          *  prosím nešahej na to NIKDY NIKDY jinak se to celý zboří díky moc
@@ -277,5 +280,13 @@ class Game {
         let player = this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name;
         let gameState = this.gameIsDraw ? ' remízou' : (this.gameResigned ? ' vzdáním hráče ' : '. Vyhrál hráč ') + player;
         showMessage('Hra skončila' + gameState);
+    }
+
+    saveStats() {
+        setStat('Počet odehraných her', loadStat('Počet odehraných her').value + 1);
+        let editedStat = this.usersData[0].bot && this.usersData[1].bot ? 'Počet Bot vs Bot her' : (this.usersData[0].bot || this.usersData[1].bot ? 'Počet Hráč vs Bot her' : 'Počet Hráč vs Hráč her');
+        setStat(editedStat, loadStat(editedStat).value + 1);
+        setStat('Počet odehraných tahů', loadStat('Počet odehraných tahů').value + this.board.moves.length);
+        setStat('Průměr odehraných tahů na hru', loadStat('Počet odehraných tahů').value / loadStat('Počet odehraných her').value);
     }
 }

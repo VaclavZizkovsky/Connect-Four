@@ -32,6 +32,10 @@ img {
     pointer-events: none;
 }
 
+table {
+    border-collapse: collapse;
+}
+
 #game {
     display: none;
     /* display: flex; */
@@ -357,4 +361,37 @@ td.move:hover {
         top: 0;
         opacity: 0;
     }
+}
+
+#settings,
+#analysis,
+#stats,
+#about {
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 30px;
+}
+
+.home-button {
+    height: 60px;
+    width: 60px;
+    font-size: 40px;
+    margin-top: 10px;
+    color: white;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+}
+
+.home-button:hover {
+    font-size: 45px;
+    transition: 0.2s;
+}
+
+#stats-table td {
+    border: 1px solid white;
+    padding: 10px;
 }
