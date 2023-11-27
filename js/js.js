@@ -27,8 +27,9 @@ function showMessage(message) {
 
 function enterGame() {
     if (loadStats() == null) {
-        console.log('delam staty')
+        console.log('delam staty');
         makeStatsArray();
+        localStorage.setItem("games", JSON.stringify([]));
     }
 
     users[0].name = document.querySelector('#username1').value;

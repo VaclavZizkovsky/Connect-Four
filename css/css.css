@@ -395,3 +395,18 @@ td.move:hover {
     border: 1px solid white;
     padding: 10px;
 }
+
+.delete-stats-button {
+    font-size: 20px;
+    margin-top: 10px;
+    color: white;
+}
+
+.delete-stats-button:hover {
+    font-size: 25px;
+    transition: 0.2s;
+}
+
+#about p {
+    max-width: 1024px;
+}
