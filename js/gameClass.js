@@ -7,6 +7,10 @@ class Game {
     gameIsDraw = false;
     bot = new Bot();
     oldGames = [];
+    analysis = {
+        analysisMode: false,
+        bestMoves: [],
+    }
 
     /**
      * 
@@ -14,9 +18,10 @@ class Game {
      * @param {number} cols 
      * @param {Array} usersData
      */
-    constructor(rows, cols, usersData) {
+    constructor(rows, cols, usersData, analysisMode) {
         this.gameArea = document.getElementById('game-area');
         this.usersData = usersData;
+        this.analysis.analysisMode = analysisMode;
         this.initializeStartingPosition(rows, cols, usersData[0].bot || usersData[1].bot);
     }
 
@@ -36,6 +41,8 @@ class Game {
         }
         this.board = new Board(pieces, rows, cols);
 
+        document.querySelector('.best-move').style.display = this.analysis.analysisMode ? 'block' : 'none';
+
         document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-flag"></i>';
         document.querySelector('.resign-button').setAttribute('onclick', 'game.resignGame();');
 
@@ -43,12 +50,22 @@ class Game {
         document.querySelector('#blue-info span').innerHTML = this.usersData[0].color == 'blue' ? this.usersData[0].name : this.usersData[1].name;
         document.querySelector('.beginning-player').innerHTML = this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name;
         document.querySelector('.ending-player').innerHTML = this.usersData[0].color == this.playingPlayer ? this.usersData[1].name : this.usersData[0].name;
-        showMessage('Začíná hráč ' + (this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name));
+
+        if (this.analysis.analysisMode) {
+            document.querySelector('.playing-player-button').style.display = 'none';
+            document.querySelector('.resign-button').style.display = 'none';
+            document.querySelector('.settings-button').style.display = 'none';
+        } else {
+            document.querySelector('.playing-player-button').style.display = 'block';
+            document.querySelector('.resign-button').style.display = 'block';
+            document.querySelector('.settings-button').style.display = 'block';
+            showMessage('Začíná hráč ' + (this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name));
+        }
         await this.drawCurrentPosition();
 
 
         this.playWithBot = playWithBot;
-        if (playWithBot && ((this.playingPlayer == this.usersData[0].color && this.usersData[0].bot) || (this.playingPlayer == this.usersData[1].color && this.usersData[1].bot))) {
+        if (!this.analysis.analysisMode && playWithBot && ((this.playingPlayer == this.usersData[0].color && this.usersData[0].bot) || (this.playingPlayer == this.usersData[1].color && this.usersData[1].bot))) {
             this.makeBotMove();
         }
     }
@@ -58,7 +75,7 @@ class Game {
      * @param {number} col
      */
     async makeMove(col) {
-        if (this.gameEnded || this.botCalculating || !this.board.latestPosition) {
+        if (this.gameEnded || this.botCalculating || !this.board.latestPosition || this.analysis.analysisMode) {
             return;
         }
 
@@ -92,7 +109,7 @@ class Game {
      * @description udělá move za bota
      */
     async makeBotMove() {
-        if (this.playWithBot && !this.gameEnded && this.board.latestPosition) {
+        if (this.playWithBot && !this.gameEnded && this.board.latestPosition && !this.analysis.analysisMode) {
             this.botCalculating = true;
             let addedPiece = this.board.getLastPiece();
             let botColor = this.playingPlayer;
@@ -185,8 +202,8 @@ class Game {
      * @returns 
      */
     displayMove(moveID) {
-        /** zabrání zobrazení předchozích tahů, když hrajou dva boti => přerušilo by to je a hra by se nedohrála */
-        if (this.usersData[0].bot && this.usersData[1].bot && !this.gameEnded) {
+        /** zabrání zobrazení předchozích tahů, když hrajou dva boti => přerušilo by to je a hra by se nedohrála (a hra není v analysis módu) */
+        if (this.usersData[0].bot && this.usersData[1].bot && !this.gameEnded && !this.analysis.analysisMode) {
             return;
         }
         if (moveID == 'next') {
@@ -202,6 +219,10 @@ class Game {
         startingPlayer = this.gameEnded && !this.gameResigned ? (startingPlayer == 'red' ? 'blue' : 'red') : startingPlayer;
         this.board.getMovePosition(moveID, startingPlayer);
         this.drawCurrentPosition();
+
+        if (this.analysis.analysisMode) {
+            document.querySelector('.best-move').innerHTML = 'Nejlepší tah: ' + this.analysis.bestMoves[this.board.displayedMove - 1];
+        }
     }
 
     /**
@@ -263,8 +284,7 @@ class Game {
             return;
         }
 
-        /** uloží statistiky */
-        this.saveStats();
+
 
         this.oldGames.push(this.board.moves);
         /** update skóre 
@@ -273,6 +293,8 @@ class Game {
         let player1Won = this.gameResigned ? !(this.playingPlayer == this.usersData[0].color) : (this.playingPlayer == this.usersData[0].color);
         this.usersData[0].score += this.gameIsDraw ? 0.5 : (player1Won ? 1 : 0);
         this.usersData[1].score += this.gameIsDraw ? 0.5 : (player1Won ? 0 : 1);
+        /** uloží statistiky */
+        this.saveStats();
 
         this.drawCurrentPosition();
         document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-forward"></i>';
@@ -286,12 +308,17 @@ class Game {
 
     saveStats() {
         let games = JSON.parse(localStorage.getItem("games"));
+        var date = new Date();
+        let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        let firstPlayer = (this.playingPlayer == 'red' && this.board.moves.length % 2 == 0) || (this.playingPlayer == 'blue' && this.board.moves.length % 2 == 1) ? 'blue' : 'red';
         games.push({
             usersData: this.usersData,
-            moves: this.board.moves
+            time: date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + minutes,
+            moves: this.board.moves,
+            firstPlayer: this.gameResigned ? (firstPlayer == 'red' ? 'blue' : 'red')  : firstPlayer,
+            gameResigned: this.gameResigned,
         });
-        console.log(games);
-        localStorage.setItem("games", JSON.stringify(games));
+        localStorage.setItem('games', JSON.stringify(games));
         setStat('Počet odehraných her', loadStat('Počet odehraných her').value + 1);
         let editedStat = this.usersData[0].bot && this.usersData[1].bot ? 'Počet Bot vs Bot her' : (this.usersData[0].bot || this.usersData[1].bot ? 'Počet Hráč vs Bot her' : 'Počet Hráč vs Hráč her');
         setStat(editedStat, loadStat(editedStat).value + 1);

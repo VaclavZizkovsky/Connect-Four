@@ -1,5 +1,6 @@
 class Bot {
     depth = 8;
+    maxDepth = 8;
 
     constructor() {
 

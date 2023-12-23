@@ -8,6 +8,7 @@
     --message-background: rgb(53, 63, 63);
     --box-shadow: rgba(243, 243, 243, 0.527) 0px 0px 30px;
     --sidebar-width: 20vw;
+    --terciary-color: #8460f1;
 }
 
 *,
@@ -21,7 +22,7 @@ body {
     padding: 0;
     margin: 0;
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
     background: var(--background);
     font-family: 'Comfortaa', cursive;
     color: white;
@@ -102,7 +103,7 @@ button {
     max-width: 7.5vw;
     user-select: none;
     border-radius: 10vw;
-    border: 3px solid #8460f1;
+    border: 3px solid var(--terciary-color);
 }
 
 #game-area .col .row.full img {
@@ -192,7 +193,7 @@ td.move:hover {
     left: calc(50vw - 250px);
     background-color: var(--message-background);
     padding: 20px 20px;
-    z-index: 2;
+    z-index: 20;
     box-shadow: var(--box-shadow);
     border-radius: 10px;
 }
@@ -230,7 +231,7 @@ td.move:hover {
 }
 
 .username-input input:focus {
-    border: 3px solid #8460f1;
+    border: 3px solid var(--terciary-color);
 }
 
 .username-input input:disabled {
@@ -275,7 +276,7 @@ td.move:hover {
 }
 
 .username-input label:has(input:checked) {
-    background-color: #8460f1;
+    background-color: var(--terciary-color);
 }
 
 .username-input label input {
@@ -285,7 +286,7 @@ td.move:hover {
 #start-button {
     position: absolute;
     top: 200px;
-    background: #8460f1;
+    background: var(--terciary-color);
     color: white;
     border-radius: 20vw;
     font-size: 40px;
@@ -375,6 +376,16 @@ td.move:hover {
     padding: 30px 30px;
 }
 
+#loading {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    z-index: 15;
+}
+
 .home-button {
     height: 60px;
     width: 60px;
@@ -409,4 +420,109 @@ td.move:hover {
 
 #about p {
     max-width: 1024px;
+}
+
+.analyse-empty-game-button {
+    padding: 10px;
+    font-size: 18px;
+    margin-top: 10px;
+    background: white;
+    color: var(--background);
+    font-family: 'Comfortaa', cursive;
+    box-shadow: var(--box-shadow);
+}
+
+.analyse-empty-game-button:hover {
+    transition: 0.4s;
+    background: var(--background);
+    color: white;
+}
+
+#last-played-games-table {
+    margin-top: 20px;
+}
+
+#last-played-games-table td.normal-cell {
+    border: 1px solid white;
+    padding: 10px;
+}
+
+#last-played-games-table td.button-cell {
+    color: white;
+    border: 1px solid white;
+    padding: 15px;
+    font-size: 25px;
+}
+
+#last-played-games-table button {
+    color: white;
+    font-size: 25px;
+}
+
+#last-played-games-table button:hover {
+    font-size: 30px;
+    margin: -5px;
+}
+
+/* stylování checkboxů na analysis stránce */
+.last-played-games-select {
+    user-select: none;
+    cursor: pointer;
+    text-align: left;
+    width: 150px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-self: center;
+}
+
+.last-played-games-select input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.last-played-games-select .checkmark {
+    width: 25px;
+    height: 25px;
+    background: var(--menu-background);
+    display: inline-block;
+    top: 0;
+    left: 0;
+    padding: 0;
+    border-radius: 5px;
+}
+
+.last-played-games-select .checkmark::after {
+    content: "✓";
+    position: relative;
+    display: none;
+    top: 0;
+    left: 7px;
+    width: 0px;
+    height: 0px;
+    background: white;
+}
+
+.last-played-games-select input:checked~.checkmark::after {
+    display: inline-block;
+}
+
+.last-played-games-select input:checked~.checkmark {
+    background: var(--terciary-color);
+}
+
+#progress {
+    width: 40vw;
+    height: 30px;
+    background: var(--menu-background);
+}
+
+#progress-bar {
+    /* transition: 0.2s; */
+    width: 0;
+    height: 30px;
+    position: absolute;
+    background: var(--terciary-color);
 }

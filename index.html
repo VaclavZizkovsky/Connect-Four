@@ -74,16 +74,16 @@
     <!-- HRA -->
     <div id="game">
         <div id="menu">
-            <button title="Hráč na tahu">
+            <button class="playing-player-button" title="Hráč na tahu">
                 <img class="playing-player-img" src="./img/redPiece.png">
             </button>
             <button class="resign-button" title="Vzdát hru" onclick="game.resignGame();">
                 <i class="fa-solid fa-flag"></i>
             </button>
-            <button title="Nastavení hry">
+            <button class="settings-button" title="Nastavení hry">
                 <i class="fa-solid fa-gear"></i>
             </button>
-            <button title="Odejít ze hry" onclick="leaveGame();">
+            <button class="leave-button" title="Odejít ze hry" onclick="leaveGame();">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
         </div>
@@ -104,6 +104,9 @@
                     <img src="./img/bluePiece.png">&nbsp;
                     <span>Hráč 2</span>
                 </div>
+            </div>
+            <div class="best-move">
+                Nejlepší tah: <span></span>
             </div>
             <div class="moves-info">
                 <span>Tahy</span><br /><br />
@@ -126,10 +129,6 @@
                 </div>
             </div>
         </div>
-
-        <div id="message-snackbar">
-            Error
-        </div>
     </div>
 
 
@@ -149,6 +148,35 @@
     <div id="analysis">
         <button class="home-button" title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
+        <!-- list her k analýze -->
+        <h1>Analýza</h1>
+        <button class="analyse-empty-game-button" title="Začne analyzovat novou hru"><i
+                class="fa-solid fa-compass"></i>&nbsp;&nbsp;Analyzovat prázdnou
+            hru</button>
+        <br />
+        <h2>Poslední odehrané hry</h2>
+        <br>
+        <label for="last-played-games-select-1" class="last-played-games-select">
+            <input type="checkbox" id="last-played-games-select-1" autocomplete="off" onchange="displayOldGames()"
+                checked>
+            <span class="checkmark"></span>&nbsp;
+            Hráč vs. Hráč
+        </label>
+        <label for="last-played-games-select-2" class="last-played-games-select">
+            <input type="checkbox" id="last-played-games-select-2" autocomplete="off" onchange="displayOldGames()"
+                checked>
+            <span class="checkmark"></span>&nbsp;
+            Hráč vs. Bot
+        </label>
+        <label for="last-played-games-select-3" class="last-played-games-select">
+            <input type="checkbox" id="last-played-games-select-3" autocomplete="off" onchange="displayOldGames()"
+                checked>
+            <span class="checkmark"></span>&nbsp;
+            Bot vs. Bot
+        </label>
+        <table id="last-played-games-table">
+
+        </table>
     </div>
 
     <!-- NASTAVENÍ -->
@@ -164,6 +192,20 @@
         <h1>O hře</h1>
         <p>Začátek vývoje této hry je březen roku 2023. Hru naprogramoval Václav Žižkovský. Použil jsem jazyky HTML,
             CSS, JavaScript, knihovnu jQuery a soubor ikon FontAwesome, zbytek kódu je mým vlastním autorským dílem</p>
+    </div>
+
+    <!-- LOADING -->
+    <div id="loading">
+        <h1 id="loading-text"></h1>
+        <br>
+        <div id="progress">
+            <div id="progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- SNACKBAR -->
+    <div id="message-snackbar">
+        Error
     </div>
 </body>
 

@@ -186,6 +186,11 @@ class Board {
         return true;
     }
 
+    /**
+     * @description přepíše pieces na stav v daném tahu
+     * @param {number} moveID na jaké číslo tahu se má posunout
+     * @param {string} startingPlayer 
+     */
     getMovePosition(moveID, startingPlayer) {
         let boardCopy = this.copy();
         let pieces = [];
@@ -221,7 +226,7 @@ class Board {
         }
 
         this.pieces = boardCopy.pieces;
-        this.latestPosition = this.moves.length == boardCopy.moves.length
+        this.latestPosition = this.moves.length == boardCopy.moves.length;
         this.displayedMove = boardCopy.moves.length;
     }
 
@@ -230,10 +235,15 @@ class Board {
      * @returns nalezený žeton, když nenajde => false
      */
     getLastPiece() {
+        //if (this.latestPosition) {
         if (!this.moves.length >= 1) {
             return false;
         }
         return this.findPiece(this.getNewPieceRow(this.moves[this.moves.length - 1]) + 1, this.moves[this.moves.length - 1]);
+        /*} else {
+            console.log('co sakra nefunguje');
+            console.log(this);
+        }*/
     }
 
     /**
@@ -261,6 +271,8 @@ class Board {
         let newBoard = new Board([], this.rows, this.cols);
         newBoard.pieces = structuredClone(this.pieces);
         newBoard.moves = structuredClone(this.moves);
+        newBoard.displayedMove = this.displayedMove;
+        newBoard.latestPosition = this.latestPosition;
         return newBoard;
     }
 }
