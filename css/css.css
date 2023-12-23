@@ -232,10 +232,13 @@ td.move:hover {
 
 .username-input input:focus {
     border: 3px solid var(--terciary-color);
+    padding: 9px;
 }
 
 .username-input input:disabled {
     border: 0;
+    padding: 12px;
+    user-select: none;
     cursor: not-allowed;
 }
 

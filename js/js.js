@@ -26,6 +26,11 @@ function showMessage(message) {
 }
 
 function enterGame() {
+    if(document.querySelector('#username1').value == '' || document.querySelector('#username2').value == ''){
+        showMessage('Vyplň uživatelská jména');
+        return;
+    }
+
     if (loadStats() == null) {
         makeStatsArray();
         localStorage.setItem("games", JSON.stringify([]));
