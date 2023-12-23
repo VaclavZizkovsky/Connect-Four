@@ -323,6 +323,6 @@ class Game {
         let editedStat = this.usersData[0].bot && this.usersData[1].bot ? 'Počet Bot vs Bot her' : (this.usersData[0].bot || this.usersData[1].bot ? 'Počet Hráč vs Bot her' : 'Počet Hráč vs Hráč her');
         setStat(editedStat, loadStat(editedStat).value + 1);
         setStat('Počet odehraných tahů', loadStat('Počet odehraných tahů').value + this.board.moves.length);
-        setStat('Průměr odehraných tahů na hru', loadStat('Počet odehraných tahů').value / loadStat('Počet odehraných her').value);
+        setStat('Průměr odehraných tahů na hru', Math.round(loadStat('Počet odehraných tahů').value / loadStat('Počet odehraných her').value));
     }
 }
