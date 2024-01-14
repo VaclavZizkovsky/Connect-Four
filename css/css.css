@@ -17,7 +17,6 @@
     box-sizing: border-box;
 }
 
-
 body {
     padding: 0;
     margin: 0;
@@ -117,7 +116,6 @@ button {
     display: flex;
     flex-direction: column;
 }
-
 
 .game-score,
 .players-info,
@@ -498,7 +496,7 @@ td.move:hover {
 }
 
 .last-played-games-select .checkmark::after {
-    content: "✓";
+    content: '✓';
     position: relative;
     display: none;
     top: 0;

@@ -77,8 +77,8 @@ class Board {
     /**
      * @description Zjistí jestli někdo nevyhrál
      * @param {Piece} piece 
-     * @param {string} playerColor 
-     * @returns {boolean} vyhrál nějaký hráč
+     * @param {String} playerColor 
+     * @returns {Boolean} vyhrál nějaký hráč
      */
     checkWin() {
         let piece = this.getLastPiece();
@@ -275,4 +275,5 @@ class Board {
         newBoard.latestPosition = this.latestPosition;
         return newBoard;
     }
+
 }

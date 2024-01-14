@@ -5,10 +5,10 @@ class Piece {
 
     /**
      * 
-     * @param {boolean} hasColor 
-     * @param {string} color 
-     * @param {number} row 
-     * @param {number} col 
+     * @param {Boolean} hasColor 
+     * @param {String} color 
+     * @param {Number} row 
+     * @param {Number} col 
      */
     constructor(hasColor, color, row, col) {
         this.hasColor = hasColor;

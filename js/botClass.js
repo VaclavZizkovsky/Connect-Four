@@ -1,3 +1,6 @@
+/**
+ * @class třída jednoho bota
+ */
 class Bot {
     depth = 8;
     maxDepth = 8;
@@ -6,7 +9,15 @@ class Bot {
 
     }
 
-
+    /** 
+     * @description Spočítá skóre pozice, za předpokladu že oba hráči zahrajou, jak nejlépe umí
+     * @param {Board} board board k analýze
+     * @param {Number} depth hloubka prohledávání 
+     * @param {Boolean} isMaximizing snaží se získat vyšší nebo nižší skóre
+     * @param {Number} alpha nejvyšší skóre u maximizujícího
+     * @param {Number} beta  nejnižší skóre u minimalizujícího
+     * @returns {Number} nejlepší možné skóre
+     */
     minimax(board, depth, isMaximizing, alpha, beta) {
         let bestMove = -1;
         if (board.checkWin()) {
@@ -31,7 +42,7 @@ class Bot {
                 boardWithMove.addPiece(pieceToAdd);
                 let positionEval = this.minimax(boardWithMove, depth - 1, false, alpha, beta);
                 if (depth == this.depth) {
-                    console.log("Move " + (possibleMoves[i]) + ": " + positionEval);
+                    console.log('Move ' + (possibleMoves[i]) + ': ' + positionEval);
                 }
                 if (positionEval > maxEval) {
                     maxEval = positionEval;
@@ -72,6 +83,12 @@ class Bot {
         }
     }
 
+    /**
+     * @description vypočte hodnoty mincí v dané pozici
+     * @param {Board} board board k analýze
+     * @param {String} botColor red nebo blue
+     * @returns {Number} skóre pozice
+     */
     evaluateBoard(board, botColor) {
         let evaluation = 0;
 
@@ -85,6 +102,12 @@ class Bot {
         return +evaluation.toFixed(4);
     }
 
+    /**
+     * @description seřadí možné pohyby od středu
+     * @param {Array} moves pole možných pohybů
+     * @param {Board} board board
+     * @returns {Array} seřazené pohyby
+     */
     sortMoves(moves, board) {
         let newMoves = [];
         let middleMove = ((board.cols + (board.cols % 2)) / 2);
@@ -101,4 +124,5 @@ class Bot {
         }
         return newMoves;
     }
+
 }

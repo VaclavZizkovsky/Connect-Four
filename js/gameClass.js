@@ -14,8 +14,8 @@ class Game {
 
     /**
      * 
-     * @param {number} rows 
-     * @param {number} cols 
+     * @param {Number} rows 
+     * @param {Number} cols 
      * @param {Array} usersData
      */
     constructor(rows, cols, usersData, analysisMode) {
@@ -27,8 +27,8 @@ class Game {
 
     /**
      * @description Připraví hru a board s prazdnýma žetonama
-     * @param {number} rows 
-     * @param {number} cols 
+     * @param {Number} rows 
+     * @param {Number} cols 
      */
     async initializeStartingPosition(rows, cols, playWithBot) {
         this.playingPlayer = Math.random() > 0.5 ? 'red' : 'blue';
@@ -144,6 +144,9 @@ class Game {
         }
     }
 
+    /**
+     * @description změní hrajícího hráče a pokud hraje bot, spustí minimax
+     */
     async changePlayer() {
         this.playingPlayer = this.playingPlayer == 'red' ? 'blue' : 'red';
         await this.drawCurrentPosition();
@@ -155,9 +158,9 @@ class Game {
 
     /**
      * @description Přidá žeton do sloupce
-     * @param {number} col 
-     * @param {boolean} pieceHasColor 
-     * @param {string} pieceColor 
+     * @param {Number} col 
+     * @param {Boolean} pieceHasColor 
+     * @param {String} pieceColor 
      * @returns Objekt žetonu nebo false
      */
     addPieceToColumn(col, pieceHasColor, pieceColor) {
@@ -185,6 +188,9 @@ class Game {
         this.showWinningModal();
     }
 
+    /**
+     * @description restartuje proměnné a zapne novou hru
+     */
     startNextGame() {
         if (!this.gameEnded) {
             return;
@@ -201,7 +207,6 @@ class Game {
     /**
      * @description zobrazí na desce nějaký tah v probíhající hře
      * @param {Number} moveID číslo tahu který se má zobrazit 
-     * @returns 
      */
     displayMove(moveID) {
         /** zabrání zobrazení předchozích tahů, když hrajou dva boti => přerušilo by to je a hra by se nedohrála (a hra není v analysis módu) */
@@ -312,7 +317,7 @@ class Game {
      * @description Provede minimax v jiném threadu
      * @param {Board} board kopie boardu
      * @param {Number} depth hloubka prohledávání 
-     * @returns nejlepší tah, pokud chyba => -1
+     * @returns {Number} nejlepší tah, pokud chyba => -1
      */
     async doMinimax(board, depth) {
         let bestMove = -1;
@@ -325,7 +330,7 @@ class Game {
 
         var blob = new Blob([
             botClass + boardClass + pieceClass + document.querySelector('#minimax-worker').textContent
-        ], { type: "text/javascript" }); // text skriptu se všema třídama (worker je neumí načíst)
+        ], { type: 'text/javascript' }); // text skriptu se všema třídama (worker je neumí načíst)
 
         var worker = new Worker(window.URL.createObjectURL(blob)); // vytvoří workera s udělaným skriptem
         worker.postMessage({
@@ -345,8 +350,11 @@ class Game {
         return bestMove;
     }
 
+    /**
+     * @description uloží statistiky a hru do localStorage
+     */
     saveStats() {
-        let games = JSON.parse(localStorage.getItem("games"));
+        let games = JSON.parse(localStorage.getItem('games'));
         var date = new Date();
         let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
         let firstPlayer = (this.playingPlayer == 'red' && this.board.moves.length % 2 == 0) || (this.playingPlayer == 'blue' && this.board.moves.length % 2 == 1) ? 'blue' : 'red';
@@ -364,4 +372,5 @@ class Game {
         setStat('Počet odehraných tahů', loadStat('Počet odehraných tahů').value + this.board.moves.length);
         setStat('Průměr odehraných tahů na hru', Math.round(loadStat('Počet odehraných tahů').value / loadStat('Počet odehraných her').value));
     }
+
 }

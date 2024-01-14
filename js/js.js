@@ -15,7 +15,10 @@ let users = [
 ];
 let inGame = false;
 
-
+/**
+ * @description zobrazí zprávu ve snackbaru
+ * @param {String} message zpráva
+ */
 function showMessage(message) {
     document.querySelector("#message-snackbar").innerHTML = message;
     document.querySelector("#message-snackbar").className = 'showed';
@@ -25,6 +28,9 @@ function showMessage(message) {
     }, 3000)
 }
 
+/**
+ * @description spustí hru
+ */
 function enterGame() {
     if (document.querySelector('#username1').value == '' || document.querySelector('#username2').value == '') {
         showMessage('Vyplň uživatelská jména');
@@ -48,6 +54,9 @@ function enterGame() {
     document.querySelector('#game').style.display = 'flex';
 }
 
+/**
+ * @description opustí hru
+ */
 function leaveGame() {
     if (!inGame) {
         showMessage('Zkurvenej bug jak je to možný že se tohle stane');
@@ -81,6 +90,10 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+/**
+ * @description vypne input, když je selectnut bot
+ * @param {Number} input číslo inputu (1 nebo 2)
+ */
 function disableUsernameInput(input) {
     if (!document.querySelector('#bot-select' + input).checked) {
         document.querySelector('#username' + input).removeAttribute('disabled')
@@ -90,6 +103,10 @@ function disableUsernameInput(input) {
     }
 }
 
+/**
+ * @description otevře stránku
+ * @param {Number} id id stránky
+ */
 async function openPage(id) {
     if (inGame) {
         return;
@@ -114,10 +131,19 @@ async function openPage(id) {
 
 //STATISTIKY
 
+/**
+ * @description načte statistiky z localStorage
+ * @returns objekt statistik
+ */
 function loadStats() {
     return JSON.parse(localStorage.getItem('stats'));
 }
 
+/**
+ * @description získá konkrétní statistiku z localStorage
+ * @param {String} searchedStat název hledané statistiky
+ * @returns {Object} načtená statistika
+ */
 function loadStat(searchedStat) {
     var stats = loadStats();
     let foundStat = null;
@@ -129,10 +155,17 @@ function loadStat(searchedStat) {
     return foundStat;
 }
 
+/**
+ * @description nahraje statistiky do localStorage
+ * @param {Array} stats pole statistik 
+ */
 function uploadStats(stats) {
     localStorage.setItem('stats', JSON.stringify(stats));
 }
 
+/**
+ * @description vykreslí statistiky do tabulky
+ */
 function displayStats() {
     if (loadStats() == null) {
         document.getElementById('stats-table').innerHTML = '<tr><td colspan="2">Nejsou uloženy žádné statistiky</td></tr>';
@@ -145,6 +178,9 @@ function displayStats() {
     }
 }
 
+/**
+ * @description udělá defaultní pole statistik v localStorage
+ */
 function makeStatsArray() {
     uploadStats([]);
     setStat('Počet odehraných her', 0);
@@ -155,6 +191,11 @@ function makeStatsArray() {
     setStat('Průměr odehraných tahů na hru', 0);
 }
 
+/**
+ * @description nastaví statistiku v localStorage
+ * @param {String} stat název statistiky
+ * @param {*} value hodnota statistiky
+ */
 function setStat(stat, value) {
     var stats = loadStats();
     let statFound = false;
@@ -173,6 +214,9 @@ function setStat(stat, value) {
     uploadStats(stats);
 }
 
+/**
+ * @description vymaže všechny statistiky z localStorage
+ */
 function deleteStats() {
     localStorage.setItem('stats', null);
     localStorage.setItem('games', null);
@@ -181,8 +225,11 @@ function deleteStats() {
 
 //ANALÝZA
 
+/**
+ * @description vykreslí odehrané hry do tabulky
+ */
 function displayOldGames() {
-    //loadne stare hry z localStorage
+    //loadne staré hry z localStorage
     var games = JSON.parse(localStorage.getItem("games"));
     games.reverse();
 
@@ -236,6 +283,10 @@ function displayOldGames() {
     }
 }
 
+/**
+ * @description vstoupí do analýzy odehrané hry
+ * @param {Number} id id hry
+ */
 async function analyseGame(id) {
     var games = JSON.parse(localStorage.getItem("games"));
     games.reverse();
@@ -284,6 +335,10 @@ async function analyseGame(id) {
     document.querySelector('#game').style.display = 'flex';
 }
 
+/**
+ * @description nastaví progress bar na počet procent
+ * @param {Number} percents počet procent
+ */
 async function setProgress(percents) {
     document.querySelector('#progress-bar').style.width = (40 * percents / 100) + 'vw';
     //počká ať se to resolvne
@@ -294,6 +349,10 @@ async function setProgress(percents) {
     })
 }
 
+/**
+ * @description vymaže odehranou hru z localStorage
+ * @param {Number} id id hry
+ */
 function deleteGame(id) {
     var games = JSON.parse(localStorage.getItem("games"));
     games.reverse();
