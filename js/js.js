@@ -267,7 +267,8 @@ async function analyseGame(id) {
         boardCopy.latestPosition = true;
         boardCopy.getMovePosition(i + 1, analyzedGame.firstPlayer);
         boardCopy.moves.splice(boardCopy.displayedMove, boardCopy.moves.length - boardCopy.displayedMove);
-        bestMoves.push(this.game.bot.minimax(boardCopy, this.game.bot.maxDepth, true, -Infinity, +Infinity));
+        await this.game.doMinimax(boardCopy, this.game.bot.maxDepth)
+        bestMoves.push(this.game.bot.bestMove);
         await setProgress((i + 1) / analyzedGame.moves.length * 100);
     }
     game.analysis.bestMoves = bestMoves;

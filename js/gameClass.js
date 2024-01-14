@@ -116,7 +116,9 @@ class Game {
 
             /** hledani nejlepsiho tahu */
             let startTime = performance.now();
-            let bestMove = this.bot.minimax(this.board.copy(), this.bot.depth, true, -Infinity, +Infinity);
+            let bestMove;
+            await this.doMinimax(this.board.copy(), this.bot.depth);    
+            bestMove = this.bot.bestMove;
             console.log(bestMove);
             let endTime = performance.now();
             console.log('Time: ' + (endTime - startTime) / 1000 + ' s');
@@ -306,6 +308,43 @@ class Game {
         showMessage('Hra skončila' + gameState);
     }
 
+    /**
+     * @description Provede minimax v jiném threadu
+     * @param {Board} board kopie boardu
+     * @param {Number} depth hloubka prohledávání 
+     * @returns nejlepší tah, pokud chyba => -1
+     */
+    async doMinimax(board, depth) {
+        let bestMove = -1;
+
+        // TOHLETO ZTĚLESNĚNÍ DEMENCE MI ZABRALO PŘESNĚ 4,5 HODINY ČISTÝHO ČASU
+        // TAK MI PROKAŽ TU LASKAVOST A UŽ NA TO NIKDY V ŽIVOTĚ NEŠAHEJ
+        let botClass = Bot.toString();
+        let boardClass = Board.toString();
+        let pieceClass = Piece.toString(); // přendá všechny potřebné třídy do textové podoby
+
+        var blob = new Blob([
+            botClass + boardClass + pieceClass + document.querySelector('#minimax-worker').textContent
+        ], { type: "text/javascript" }); // text skriptu se všema třídama (worker je neumí načíst)
+
+        var worker = new Worker(window.URL.createObjectURL(blob)); // vytvoří workera s udělaným skriptem
+        worker.postMessage({
+            board: board,
+            depth: depth,
+            bot: this.bot
+        }); // pošle v messagi potřebné parametry a tím zapne workera
+        await new Promise((resolve) => { 
+            worker.onmessage = function (e) {
+                bestMove = e.data; // počká na odpověď a tu zapíše do bestMove
+                resolve();
+            }
+        });
+
+        worker.terminate(); // zničí workera – zabíral by místo
+        this.bot.bestMove = bestMove;
+        return bestMove;
+    }
+
     saveStats() {
         let games = JSON.parse(localStorage.getItem("games"));
         var date = new Date();
@@ -315,7 +354,7 @@ class Game {
             usersData: this.usersData,
             time: date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + minutes,
             moves: this.board.moves,
-            firstPlayer: this.gameResigned ? (firstPlayer == 'red' ? 'blue' : 'red')  : firstPlayer,
+            firstPlayer: this.gameResigned ? (firstPlayer == 'red' ? 'blue' : 'red') : firstPlayer,
             gameResigned: this.gameResigned,
         });
         localStorage.setItem('games', JSON.stringify(games));

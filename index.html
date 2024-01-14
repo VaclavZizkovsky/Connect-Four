@@ -16,7 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="./js/pieceClass.js"></script>
     <script src="./js/boardClass.js"></script>
-    <script src="./js/botClass.js"></script>
+    <script src="./js/botClass.js" defer></script>
     <script src="./js/gameClass.js"></script>
     <script defer src="./js/js.js"></script>
 </head>
@@ -208,5 +208,18 @@
         Error
     </div>
 </body>
+
+<!-- KÓD PRO WORKERA -->
+<script id="minimax-worker" type="javascript/worker">
+    self.onmessage = async function(e){
+        let bot = new Bot();
+        board = new Board(e.data.board.pieces, e.data.board.rows, e.data.board.cols);
+        board.latestPosition = e.data.board.latestPosition;
+        board.displayedMove = e.data.board.displayedMove;
+        board.moves = e.data.board.moves;
+        depth = e.data.depth;
+        self.postMessage(bot.minimax(board.copy(), depth, true, -Infinity, +Infinity));
+    }
+</script>
 
 </html>
