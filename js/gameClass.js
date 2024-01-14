@@ -306,7 +306,7 @@ class Game {
         this.drawCurrentPosition();
         document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-forward"></i>';
         document.querySelector('.resign-button').setAttribute('onclick', 'game.startNextGame();');
-        document.querySelector('.resign-button').setAttribute('title', 'Další hra');
+        document.querySelector('.resign-button').setAttribute('data-title', 'Další hra');
 
         let player = this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name;
         let gameState = this.gameIsDraw ? ' remízou' : (this.gameResigned ? ' vzdáním hráče ' : '. Vyhrál hráč ') + player;

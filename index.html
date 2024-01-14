@@ -59,17 +59,17 @@
 
         <div class="bottom-options">
             <div class="bottom-option">
-                <button onclick="openPage('settings')" title="Nastavení"><i class="fa-solid fa-gear"></i></button>
+                <button onclick="openPage('settings')" data-title="Nastavení"><i class="fa-solid fa-gear"></i></button>
             </div>
             <div class="bottom-option">
-                <button onclick="openPage('analysis')" title="Analyzovat vlastní hru"><i
+                <button onclick="openPage('analysis')" data-title="Analýza"><i
                         class="fa-solid fa-compass"></i></button>
             </div>
             <div class="bottom-option">
-                <button onclick="openPage('stats')" title="Statistiky"><i class="fa-solid fa-chart-column"></i></button>
+                <button onclick="openPage('stats')" data-title="Statistiky"><i class="fa-solid fa-chart-column"></i></button>
             </div>
             <div class="bottom-option">
-                <button onclick="openPage('about');" title="O hře"><i class="fa-solid fa-circle-info"></i></button>
+                <button onclick="openPage('about');" data-title="O hře"><i class="fa-solid fa-circle-info"></i></button>
             </div>
         </div>
         <div id="copyright">&copy; Václav Žižkovský 2023</div>
@@ -78,16 +78,16 @@
     <!-- HRA -->
     <div id="game">
         <div id="menu">
-            <button class="playing-player-button" title="Hráč na tahu">
+            <button class="playing-player-button" data-title="Hráč na tahu">
                 <img class="playing-player-img" src="./img/redPiece.png">
             </button>
-            <button class="resign-button" title="Vzdát hru" onclick="game.resignGame();">
+            <button class="resign-button" data-title="Vzdát hru" onclick="game.resignGame();">
                 <i class="fa-solid fa-flag"></i>
             </button>
-            <button class="settings-button" title="Nastavení hry">
+            <button class="settings-button" data-title="Nastavení hry">
                 <i class="fa-solid fa-gear"></i>
             </button>
-            <button class="leave-button" title="Odejít ze hry" onclick="leaveGame();">
+            <button class="leave-button" data-title="Odejít ze hry" onclick="leaveGame();">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
         </div>
@@ -138,23 +138,23 @@
 
     <!-- STATISTIKY -->
     <div id="stats">
-        <button class="home-button" title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
+        <button class="home-button" data-title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
         <h1>Statistiky</h1>
         <p>Zde si můžeš prohlédnout všechny statistiky</p>
         <table id="stats-table">
         </table>
-        <button class="delete-stats-button" title="Smazat statistiky" onclick="deleteStats();"><i
+        <button class="delete-stats-button" data-title="Smazat statistiky" onclick="deleteStats();"><i
                 class="fa-solid fa-trash"></i></button>
     </div>
 
     <!-- ANALÝZA -->
     <div id="analysis">
-        <button class="home-button" title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
+        <button class="home-button" data-title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
         <!-- list her k analýze -->
         <h1>Analýza</h1>
-        <button class="analyse-empty-game-button" title="Začne analyzovat novou hru"><i
+        <button class="analyse-empty-game-button"><i
                 class="fa-solid fa-compass"></i>&nbsp;&nbsp;Analyzovat prázdnou
             hru</button>
         <br />
@@ -185,13 +185,13 @@
 
     <!-- NASTAVENÍ -->
     <div id="settings">
-        <button class="home-button" title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
+        <button class="home-button" data-title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
     </div>
 
     <!-- O HŘE -->
     <div id="about">
-        <button class="home-button" title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
+        <button class="home-button" data-title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
         <h1>O hře</h1>
         <p>Začátek vývoje této hry je březen roku 2023. Hru naprogramoval Václav Žižkovský. Použil jsem jazyky HTML,
