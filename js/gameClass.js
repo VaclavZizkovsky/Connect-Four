@@ -117,7 +117,7 @@ class Game {
             /** hledani nejlepsiho tahu */
             let startTime = performance.now();
             let bestMove;
-            await this.doMinimax(this.board.copy(), this.bot.depth);    
+            await this.doMinimax(this.board.copy(), this.bot.depth);
             bestMove = this.bot.bestMove;
             console.log(bestMove);
             let endTime = performance.now();
@@ -333,7 +333,7 @@ class Game {
             depth: depth,
             bot: this.bot
         }); // pošle v messagi potřebné parametry a tím zapne workera
-        await new Promise((resolve) => { 
+        await new Promise((resolve) => {
             worker.onmessage = function (e) {
                 bestMove = e.data; // počká na odpověď a tu zapíše do bestMove
                 resolve();

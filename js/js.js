@@ -26,7 +26,7 @@ function showMessage(message) {
 }
 
 function enterGame() {
-    if(document.querySelector('#username1').value == '' || document.querySelector('#username2').value == ''){
+    if (document.querySelector('#username1').value == '' || document.querySelector('#username2').value == '') {
         showMessage('Vyplň uživatelská jména');
         return;
     }
@@ -58,7 +58,7 @@ function leaveGame() {
         return;
     }
 
-    document.querySelector('#'+openedPage).style.display = openedPage == 'start' ? 'block' : 'flex';
+    document.querySelector('#' + openedPage).style.display = openedPage == 'start' ? 'block' : 'flex';
     document.querySelector('#game').style.display = 'none';
     inGame = false;
     game = null;
@@ -232,7 +232,7 @@ function displayOldGames() {
 
     table.innerHTML = '';
     for (let i = 0; i < games.length; i++) {
-        table.innerHTML += '<tr> <td class="normal-cell">' + games[i].usersData[0].name + ' vs. ' + games[i].usersData[1].name + '</td> <td class="normal-cell">' + games[i].time + '</td> <td class="normal-cell">' + games[i].usersData[0].score + ' – ' + games[i].usersData[1].score + '</td> <td class="normal-cell">'+games[i].moves.length+' tahů</td> <td class="button-cell"><button onclick="analyseGame(' + gameIDs[i] + ')" title="Analyzovat"><i class="fa-solid fa-compass"></i></button></td> <td class="button-cell"><button onclick="deleteGame(' + gameIDs[i] + ')" title="Smazat hru"><i class="fa-solid fa-trash"></i></button></td> </tr>'
+        table.innerHTML += '<tr> <td class="normal-cell">' + games[i].usersData[0].name + ' vs. ' + games[i].usersData[1].name + '</td> <td class="normal-cell">' + games[i].time + '</td> <td class="normal-cell">' + games[i].usersData[0].score + ' – ' + games[i].usersData[1].score + '</td> <td class="normal-cell">' + games[i].moves.length + ' tahů</td> <td class="button-cell"><button onclick="analyseGame(' + gameIDs[i] + ')" title="Analyzovat"><i class="fa-solid fa-compass"></i></button></td> <td class="button-cell"><button onclick="deleteGame(' + gameIDs[i] + ')" title="Smazat hru"><i class="fa-solid fa-trash"></i></button></td> </tr>'
     }
 }
 
