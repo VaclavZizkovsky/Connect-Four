@@ -14,6 +14,7 @@ let users = [
     }
 ];
 let inGame = false;
+let hoveringCol = -1;
 
 /**
  * @description zobrazí zprávu ve snackbaru
@@ -89,6 +90,7 @@ window.addEventListener('keydown', (e) => {
         game.displayMove('previous');
     }
 });
+
 
 /**
  * @description vypne input, když je selectnut bot

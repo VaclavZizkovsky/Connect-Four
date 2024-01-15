@@ -102,7 +102,11 @@ button {
     max-width: 7.5vw;
     user-select: none;
     border-radius: 10vw;
-    border: 3px solid var(--terciary-color);
+    border: 3px solid #5c39c4;
+}
+
+img[data-hovering='true'] {
+    border: 5px solid var(--terciary-color) !important;
 }
 
 #game-area .col .row.full img {

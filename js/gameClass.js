@@ -1,6 +1,7 @@
 class Game {
     usersData;
     playingPlayer;
+    hoveringCol = -1;
     playWithBot = false;
     gameEnded = false;
     gameResigned = false;
@@ -241,12 +242,12 @@ class Game {
         this.gameArea.innerHTML = '';
 
         for (let i = 0; i < this.board.cols; i++) {
-            this.gameArea.innerHTML += '<div class="col col-' + (i + 1) + '" onmouseover="" onmousedown="" onclick="game.makeMove(' + (i + 1) + ', false);"></div>';
+            this.gameArea.innerHTML += '<div class="col col-' + (i + 1) + '" onmouseover="game.hoverCol(' + (i + 1) + ', false)" onmouseout="game.hoverCol(' + (i + 1) + ', true)" onclick="game.makeMove(' + (i + 1) + ', false);"></div>';
         }
 
         this.board.pieces.forEach(piece => {
             let fullPiece = piece.hasColor ? 'full' : '';
-            document.querySelector(`.col-${piece.col}`).innerHTML += '<div class="row row-' + piece.row + ' ' + fullPiece + '"><img src="./img/' + piece.color + 'Piece.png"></div>';
+            document.querySelector(`.col-${piece.col}`).innerHTML += '<div class="row row-' + piece.row + ' ' + fullPiece + '"><img data-hovering="false" src="./img/' + piece.color + 'Piece.png"></div>';
         });
 
 
@@ -281,6 +282,26 @@ class Game {
                 resolve();
             }, 1);
         })
+    }
+
+    hoverCol(col, unhovering) {
+        if ((this.usersData[0].bot && this.usersData[1].bot) || this.botCalculating || this.gameEnded || this.analysis.analysisMode || !this.board.latestPosition) {
+            return;
+        }
+
+        let hoveringRow = this.board.getNewPieceRow(col);
+        if (hoveringRow < 1) {
+            return;
+        }
+        let piece = document.querySelector('.col-' + col + ' .row-' + hoveringRow + ' img');
+
+        if (!unhovering) {
+            this.hoveringCol = col;
+            piece.setAttribute('data-hovering', 'true');
+        } else {
+            this.hoveringCol = -1;
+            piece.setAttribute('data-hovering', 'false');
+        }
     }
 
     /**
