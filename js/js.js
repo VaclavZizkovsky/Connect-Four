@@ -237,6 +237,9 @@ function deleteStats() {
 function displayOldGames() {
     //loadne staré hry z localStorage
     var games = JSON.parse(localStorage.getItem("games"));
+    if(games == null){
+        games = [];
+    }
     games.reverse();
 
     //načte checkboxy
@@ -245,10 +248,6 @@ function displayOldGames() {
     let bvbGames = document.querySelector('#last-played-games-select-3').checked; //bvb = bot vs bot
 
     var table = document.getElementById("last-played-games-table");
-    if (games == null || (!pvpGames && !pvbGames && !bvbGames)) {
-        table.innerHTML = '<tr><td colspan="3">Žádné hry k načtení</td></tr>';
-        return;
-    }
 
     // uloží id filtrovaných her (aby se neukládaly z toho splicovaného pole)
     // nefunguje když je pole games prázdné? (neověřeno)
@@ -283,6 +282,10 @@ function displayOldGames() {
         gameIDs.push(i + splicedCount);
     }
 
+    if (gameIDs.length == 0) {
+        table.innerHTML = '<tr><td colspan="3">Žádné hry k načtení</td></tr>';
+        return;
+    }
     table.innerHTML = '';
     for (let i = 0; i < games.length; i++) {
         table.innerHTML += '<tr> <td class="normal-cell">' + games[i].usersData[0].name + ' vs. ' + games[i].usersData[1].name + '</td> <td class="normal-cell">' + games[i].time + '</td> <td class="normal-cell">' + games[i].usersData[0].score + ' – ' + games[i].usersData[1].score + '</td> <td class="normal-cell">' + games[i].moves.length + ' tahů</td> <td class="button-cell"><button onclick="analyseGame(' + gameIDs[i] + ')" title="Analyzovat"><i class="fa-solid fa-compass"></i></button></td> <td class="button-cell"><button onclick="deleteGame(' + gameIDs[i] + ')" title="Smazat hru"><i class="fa-solid fa-trash"></i></button></td> </tr>'
