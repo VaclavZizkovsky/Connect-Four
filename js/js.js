@@ -3,12 +3,12 @@ var game;
 let users = [
     {
         color: 'red',
-        name: 'Franta Vomáčka',
+        name: 'Hráč 1',
         bot: false,
         score: 0,
     }, {
         color: 'blue',
-        name: 'Bot',
+        name: 'Hráč 2',
         bot: false,
         score: 0
     }
@@ -73,7 +73,11 @@ function leaveGame() {
     inGame = false;
     game = null;
     users[0].score = 0;
+    users[0].name = 'Hráč 1';
+    users[0].bot = false;
     users[1].score = 0;
+    users[1].name = 'Hráč 2';
+    users[1].bot = false;
 }
 
 
@@ -303,7 +307,7 @@ async function analyseGame(id) {
     document.querySelector('.ending-player').innerHTML = analyzedGame.usersData[0].color == analyzedGame.firstPlayer ? analyzedGame.usersData[1].name : analyzedGame.usersData[0].name;
     game.gameEnded = true;
     game.gameResigned = analyzedGame.gameResigned;
-    //game.gameIsDraw = game.board.checkWin();
+    game.gameIsDraw = game.board.checkWin();
     game.board.moves = analyzedGame.moves;
     game.board.getMovePosition(game.board.moves.length, analyzedGame.firstPlayer);
 
@@ -330,7 +334,26 @@ async function analyseGame(id) {
     inGame = true;
     game.drawCurrentPosition();
 
-    openedPage = 'analysis'
+    openedPage = 'analysis';
+    document.querySelector('#analysis').style.display = 'none'; //pro jistotu
+    document.querySelector('#loading').style.display = 'none';
+    document.querySelector('#start').style.display = 'none'; //pro jistotu
+    document.querySelector('#game').style.display = 'flex';
+}
+
+/**
+ * @description vstoupí do analýzy prázdné hry
+ * aby v tom byl pořádek trochu
+ */
+function analyseEmptyGame(){
+    inGame = true;
+    game = new Game(6, 7, users, true);
+    game.analysis.emptyGame = true;
+    game.playingPlayer = 'red';
+
+    game.drawCurrentPosition();
+
+    openedPage = 'analysis';
     document.querySelector('#analysis').style.display = 'none'; //pro jistotu
     document.querySelector('#loading').style.display = 'none';
     document.querySelector('#start').style.display = 'none'; //pro jistotu

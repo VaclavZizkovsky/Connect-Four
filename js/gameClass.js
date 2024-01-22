@@ -3,6 +3,7 @@ class Game {
     playingPlayer;
     hoveringCol = -1;
     playWithBot = false;
+    botCalculating = false;
     gameEnded = false;
     gameResigned = false;
     gameIsDraw = false;
@@ -10,6 +11,7 @@ class Game {
     oldGames = [];
     analysis = {
         analysisMode: false,
+        emptyGame: false,
         bestMoves: [],
     }
 
@@ -76,8 +78,15 @@ class Game {
      * @param {number} col
      */
     async makeMove(col) {
-        if (this.gameEnded || this.botCalculating || !this.board.latestPosition || this.analysis.analysisMode) {
+        if (this.gameEnded || this.botCalculating || (!this.board.latestPosition && !this.analysis.emptyGame) || (this.analysis.analysisMode && !this.analysis.emptyGame)) {
             return;
+        }
+
+        if (!this.board.latestPosition) {
+            this.displayMove(this.board.displayedMove);
+            this.board.moves.splice(this.board.displayedMove);
+            this.board.latestPosition = true;
+            this.playingPlayer = this.board.moves.length % 2 == 0 ? 'red' : 'blue';
         }
 
         let addedPiece = this.addPieceToColumn(col, true, this.playingPlayer);
@@ -91,6 +100,14 @@ class Game {
         this.gameIsDraw = this.board.getPossibleMoves().length == 0 && !this.board.checkWin(addedPiece);
 
         if (!this.gameEnded) {
+            if (this.analysis.analysisMode) {
+                document.querySelector('.best-move').innerHTML = 'Nejlepší tah: počítám...';
+                this.botCalculating = true;
+                await this.doMinimax(this.board.copy(), this.bot.maxDepth);
+                this.analysis.bestMoves[this.board.displayedMove - 1] = this.bot.bestMove;
+                this.botCalculating = false;
+                document.querySelector('.best-move').innerHTML = 'Nejlepší tah: ' + this.analysis.bestMoves[this.board.displayedMove - 1];
+            }
             this.changePlayer();
         } else {
             if (!this.gameIsDraw) {
@@ -285,7 +302,7 @@ class Game {
     }
 
     hoverCol(col, unhovering) {
-        if ((this.usersData[0].bot && this.usersData[1].bot) || this.botCalculating || this.gameEnded || this.analysis.analysisMode || !this.board.latestPosition) {
+        if ((this.usersData[0].bot && this.usersData[1].bot) || this.botCalculating || this.gameEnded || (this.analysis.analysisMode && !this.analysis.emptyGame) || (!this.board.latestPosition && !this.botCalculating.emptyGame)) {
             return;
         }
 
@@ -375,6 +392,10 @@ class Game {
      * @description uloží statistiky a hru do localStorage
      */
     saveStats() {
+        if (this.analysis.analysisMode) {
+            return;
+        }
+
         let games = JSON.parse(localStorage.getItem('games'));
         var date = new Date();
         let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
