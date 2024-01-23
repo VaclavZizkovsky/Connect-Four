@@ -62,11 +62,11 @@
                 <button onclick="openPage('settings')" data-title="Nastavení"><i class="fa-solid fa-gear"></i></button>
             </div>
             <div class="bottom-option">
-                <button onclick="openPage('analysis')" data-title="Analýza"><i
-                        class="fa-solid fa-compass"></i></button>
+                <button onclick="openPage('analysis')" data-title="Analýza"><i class="fa-solid fa-compass"></i></button>
             </div>
             <div class="bottom-option">
-                <button onclick="openPage('stats')" data-title="Statistiky"><i class="fa-solid fa-chart-column"></i></button>
+                <button onclick="openPage('stats')" data-title="Statistiky"><i
+                        class="fa-solid fa-chart-column"></i></button>
             </div>
             <div class="bottom-option">
                 <button onclick="openPage('about');" data-title="Návod"><i class="fa-solid fa-circle-info"></i></button>
@@ -101,16 +101,27 @@
             </div>
             <div class="players-info">
                 <div id="red-info" class="player-info">
-                    <img src="./img/redPiece.png">&nbsp;
+                    <img src="./img/redPiece.png">&nbsp;&nbsp;
                     <span>Hráč 1</span>
                 </div>
                 <div id="blue-info" class="player-info">
-                    <img src="./img/bluePiece.png">&nbsp;
+                    <img src="./img/bluePiece.png">&nbsp;&nbsp;
                     <span>Hráč 2</span>
                 </div>
             </div>
-            <div class="best-move">
-                Nejlepší tah: <span></span>
+            <div class="analysis">
+                <div class="best-move">
+                    Nejlepší tah: <span></span>
+                </div>
+                <div class="eval">
+                    Eval: <span>0</span>
+                </div>
+                <div class="analysis-actions">
+                        <button id="copy-game-button" data-title="Kopírovat pozici" onclick="copyPosition()"><i
+                                class="fa-solid fa-copy"></i></button>
+                        <button id="save-game-button" data-title="Uložit hru" onclick="savePosition()"><i
+                                class="fa-solid fa-floppy-disk"></i></button>
+                </div>
             </div>
             <div class="moves-info">
                 <span>Tahy</span><br /><br />
@@ -157,6 +168,10 @@
         <button class="analyse-empty-game-button" onclick="analyseEmptyGame()"><i
                 class="fa-solid fa-compass"></i>&nbsp;&nbsp;Analyzovat prázdnou
             hru</button>
+        <div id="load-game">
+            <input type="text" id="load-game-input" placeholder="Kód hry">
+            <button id="load-game-button" data-title="Otevřít hru" onclick="analyseCustomGame()"><i class="fa-solid fa-upload"></i></button>
+        </div>
         <br />
         <h2>Poslední odehrané hry</h2>
         <br>

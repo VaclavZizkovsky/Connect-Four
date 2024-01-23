@@ -38,7 +38,6 @@ table {
 
 #game {
     display: none;
-    /* display: flex; */
     justify-content: space-between;
 }
 
@@ -63,7 +62,7 @@ table {
     margin: 0 0.5vw;
 }
 
-#game-area .col:hover {
+#game-area .col:hover:has(img[data-hovering='true']) {
     background-color: rgb(66, 66, 66);
     cursor: pointer;
 }
@@ -123,30 +122,54 @@ img[data-hovering='true'] {
 
 .game-score,
 .players-info,
+.analysis,
 .moves-info {
     margin-top: 40px;
 }
 
 .game-score {
     text-align: center;
-    font-size: 50px;
+    font-size: 35px;
 }
 
 .players-info {
-    font-size: 50px;
+    font-size: 25px;
 }
 
 .player-info:nth-child(2) {
     margin-top: 20px;
 }
 
+.player-info {
+    display: flex;
+}
+
 .player-info span {
-    font-size: 35px;
+    align-self: center;
     display: inline;
 }
 
 .player-info img {
     max-width: 40px;
+}
+
+.analysis>div {
+    font-size: 20px;
+}
+
+
+.analysis-actions {
+    margin-top: 40px;
+    display: flex;
+}
+
+.analysis-actions button {
+    color: white;
+    font-size: 25px;
+}
+
+#copy-game-button{
+    margin-right:10px;
 }
 
 .moves-info {
@@ -442,6 +465,30 @@ td.move:hover {
     transition: 0.4s;
     background: var(--background);
     color: white;
+}
+
+#load-game{
+    margin-top: 30px;
+    display: flex;
+}
+
+#load-game-input {
+    padding: 10px;
+    font-size: 17px;
+    max-width: 200px;
+    font-family: 'Comfortaa';
+    border-radius: 5px;
+}
+
+#load-game-input:focus {
+    border: 2px solid var(--terciary-color);
+}
+
+#load-game-button{
+    color: white;
+    margin-left: 10px;
+    font-size: 30px;
+    align-self: center;
 }
 
 #last-played-games-table {

@@ -78,6 +78,48 @@ function leaveGame() {
     users[1].score = 0;
     users[1].name = 'Hráč 2';
     users[1].bot = false;
+
+    if (openedPage == 'analysis') {
+        displayOldGames();
+    }
+}
+
+function copyPosition() {
+    if (!inGame || !game.analysis.analysisMode) {
+        return;
+    }
+    let boardCopy = game.board.copy();
+    boardCopy.moves.splice(game.board.displayedMove);
+    let position = boardCopy.moves.toString();
+    navigator.clipboard.writeText(position);
+    document.querySelector('#copy-game-button i').setAttribute('class', 'fa-solid fa-check');
+    document.querySelector('#copy-game-button').setAttribute('data-title', 'Zkopírováno!');
+    setTimeout(() => {
+        document.querySelector('#copy-game-button i').setAttribute('class', 'fa-solid fa-copy');
+        document.querySelector('#copy-game-button').setAttribute('data-title', 'Kopírovat pozici');
+    }, 1500)
+}
+
+function savePosition() {
+    if (!inGame || !game.analysis.analysisMode) {
+        return;
+    }
+
+    let games = JSON.parse(localStorage.getItem('games'));
+    var date = new Date();
+    let minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+    let firstPlayer = (game.playingPlayer == 'red' && game.board.moves.length % 2 == 0) || (game.playingPlayer == 'blue' && game.board.moves.length % 2 == 1) ? 'blue' : 'red';
+    games.push({
+        usersData: game.usersData,
+        time: date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + minutes,
+        moves: game.board.moves,
+        firstPlayer: game.gameResigned ? (firstPlayer == 'red' ? 'blue' : 'red') : firstPlayer,
+        gameResigned: game.gameResigned,
+    });
+    localStorage.setItem('games', JSON.stringify(games));
+
+    document.querySelector('#save-game-button').style.display = 'none';
+    showMessage('Hra byla uložena');
 }
 
 
@@ -237,7 +279,7 @@ function deleteStats() {
 function displayOldGames() {
     //loadne staré hry z localStorage
     var games = JSON.parse(localStorage.getItem("games"));
-    if(games == null){
+    if (games == null) {
         games = [];
     }
     games.reverse();
@@ -288,7 +330,7 @@ function displayOldGames() {
     }
     table.innerHTML = '';
     for (let i = 0; i < games.length; i++) {
-        table.innerHTML += '<tr> <td class="normal-cell">' + games[i].usersData[0].name + ' vs. ' + games[i].usersData[1].name + '</td> <td class="normal-cell">' + games[i].time + '</td> <td class="normal-cell">' + games[i].usersData[0].score + ' – ' + games[i].usersData[1].score + '</td> <td class="normal-cell">' + games[i].moves.length + ' tahů</td> <td class="button-cell"><button onclick="analyseGame(' + gameIDs[i] + ')" title="Analyzovat"><i class="fa-solid fa-compass"></i></button></td> <td class="button-cell"><button onclick="deleteGame(' + gameIDs[i] + ')" title="Smazat hru"><i class="fa-solid fa-trash"></i></button></td> </tr>'
+        table.innerHTML += '<tr> <td class="normal-cell">' + games[i].usersData[0].name + ' vs. ' + games[i].usersData[1].name + '</td> <td class="normal-cell">' + games[i].time + '</td> <td class="normal-cell">' + games[i].usersData[0].score + ' – ' + games[i].usersData[1].score + '</td> <td class="normal-cell">' + games[i].moves.length + ' tahů</td> <td class="button-cell"><button onclick="analyseGame(' + gameIDs[i] + ')" data-title="Analyzovat"><i class="fa-solid fa-compass"></i></button></td> <td class="button-cell"><button onclick="deleteGame(' + gameIDs[i] + ')" data-title="Smazat"><i class="fa-solid fa-trash"></i></button></td> </tr>'
     }
 }
 
@@ -342,13 +384,14 @@ async function analyseGame(id) {
     document.querySelector('#loading').style.display = 'none';
     document.querySelector('#start').style.display = 'none'; //pro jistotu
     document.querySelector('#game').style.display = 'flex';
+    document.querySelector('#save-game-button').style.display = 'none';
 }
 
 /**
  * @description vstoupí do analýzy prázdné hry
  * aby v tom byl pořádek trochu
  */
-function analyseEmptyGame(){
+function analyseEmptyGame() {
     inGame = true;
     game = new Game(6, 7, users, true);
     game.analysis.emptyGame = true;
@@ -361,6 +404,73 @@ function analyseEmptyGame(){
     document.querySelector('#loading').style.display = 'none';
     document.querySelector('#start').style.display = 'none'; //pro jistotu
     document.querySelector('#game').style.display = 'flex';
+    document.querySelector('#save-game-button').style.display = 'none';
+}
+
+async function analyseCustomGame() {
+    game = new Game(6, 7, users, true);
+    game.analysis.emptyGame = true;
+
+    let position = document.querySelector('#load-game-input').value;
+    let moves = position.split(',');
+    let parseSuccess = true;
+    for (let i = 0; i < moves.length; i++) {
+        let parsedMove = parseInt(moves[i]);
+        console.log(parsedMove >= 1 && parsedMove <= 7);
+        if (!(parsedMove >= 1 && parsedMove <= 7)) {
+            parseSuccess = false;
+            break;
+        }
+        moves[i] = parseInt(moves[i]);
+        let boardCopy = game.board.copy();
+        boardCopy.moves = structuredClone(moves);
+        boardCopy.moves.splice(i + 1);
+        if (boardCopy.checkWin()) {
+            break;
+        }
+    }
+    if (!parseSuccess) {
+        showMessage('Chybný kód. Správný formát kódu je popsán v návodu.');
+        return;
+    }
+    let lastMove = moves[moves.length - 1];
+    moves.pop();
+
+    game.playingPlayer = moves.length % 2 == 0 ? 'red' : 'blue';
+    game.board.moves = moves;
+    console.log(moves);
+    game.board.getMovePosition(moves.length, 'red');
+
+    //zapne loading
+    document.querySelector('#loading-text').innerHTML = 'Načítám hru a hledám nejlepší tahy...';
+    setProgress(0);
+    await openPage('loading');
+
+
+    //najde nejlepší tahy pro pozici
+    let bestMoves = [];
+    for (let i = 0; i < moves.length; i++) {
+        let boardCopy = this.game.board.copy();
+        boardCopy.latestPosition = true;
+        boardCopy.getMovePosition(i + 1, 'red');
+        boardCopy.moves.splice(boardCopy.displayedMove, boardCopy.moves.length - boardCopy.displayedMove);
+        await this.game.doMinimax(boardCopy, this.game.bot.maxDepth);
+        bestMoves.push(this.game.bot.bestMove);
+        await setProgress((i + 1) / moves.length * 100);
+    }
+    game.analysis.bestMoves = bestMoves;
+    setProgress(100);
+
+    inGame = true;
+    game.drawCurrentPosition();
+
+    openedPage = 'analysis';
+    document.querySelector('#analysis').style.display = 'none'; //pro jistotu
+    document.querySelector('#loading').style.display = 'none';
+    document.querySelector('#start').style.display = 'none'; //pro jistotu
+    document.querySelector('#game').style.display = 'flex';
+    document.querySelector('#save-game-button').style.display = 'none';
+    game.makeMove(lastMove);
 }
 
 /**

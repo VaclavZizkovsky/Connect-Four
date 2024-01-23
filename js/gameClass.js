@@ -34,7 +34,7 @@ class Game {
      * @param {Number} cols 
      */
     async initializeStartingPosition(rows, cols, playWithBot) {
-        this.playingPlayer = Math.random() > 0.5 ? 'red' : 'blue';
+        this.playingPlayer = this.analysis.analysisMode ? 'red' : (Math.random() > 0.5 ? 'red' : 'blue');
 
         let pieces = [];
         for (let i = 0; i < cols; i++) {
@@ -44,7 +44,7 @@ class Game {
         }
         this.board = new Board(pieces, rows, cols);
 
-        document.querySelector('.best-move').style.display = this.analysis.analysisMode ? 'block' : 'none';
+        document.querySelector('.analysis').style.display = this.analysis.analysisMode ? 'block' : 'none';
 
         document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-flag"></i>';
         document.querySelector('.resign-button').setAttribute('onclick', 'game.resignGame();');
@@ -242,6 +242,7 @@ class Game {
         }
         let startingPlayer = this.board.moves.length % 2 == 0 ? this.playingPlayer : (this.playingPlayer == 'red' ? 'blue' : 'red');
         startingPlayer = this.gameEnded && !this.gameResigned ? (startingPlayer == 'red' ? 'blue' : 'red') : startingPlayer;
+        startingPlayer = this.analysis.emptyGame ? 'red' : startingPlayer;
         this.board.getMovePosition(moveID, startingPlayer);
         this.drawCurrentPosition();
 
@@ -302,7 +303,7 @@ class Game {
     }
 
     hoverCol(col, unhovering) {
-        if ((this.usersData[0].bot && this.usersData[1].bot) || this.botCalculating || this.gameEnded || (this.analysis.analysisMode && !this.analysis.emptyGame) || (!this.board.latestPosition && !this.botCalculating.emptyGame)) {
+        if ((this.usersData[0].bot && this.usersData[1].bot) || this.botCalculating || this.gameEnded || (this.analysis.analysisMode && !this.analysis.emptyGame) || (!this.board.latestPosition && !this.analysis.emptyGame)) {
             return;
         }
 
@@ -340,6 +341,10 @@ class Game {
         this.usersData[1].score += this.gameIsDraw ? 0.5 : (player1Won ? 0 : 1);
         /** uloží statistiky */
         this.saveStats();
+
+        if(this.analysis.analysisMode && this.analysis.emptyGame){
+            document.querySelector('#save-game-button').style.display = 'inline';
+        }
 
         this.drawCurrentPosition();
         document.querySelector('.resign-button').innerHTML = '<i class="fa-solid fa-forward"></i>';
