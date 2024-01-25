@@ -168,8 +168,8 @@ img[data-hovering='true'] {
     font-size: 25px;
 }
 
-#copy-game-button{
-    margin-right:10px;
+#copy-game-button {
+    margin-right: 10px;
 }
 
 .moves-info {
@@ -244,41 +244,41 @@ td.move:hover {
     justify-content: space-around;
 }
 
-.username-input {
+.userdata-input {
     text-align: center;
 }
 
-.username-input input {
+.userdata-input .username-input {
     padding: 10px;
     font-size: 20px;
     font-family: 'Comfortaa';
     border-radius: 5px;
 }
 
-.username-input input:focus {
+.userdata-input .username-input:focus {
     border: 3px solid var(--terciary-color);
     padding: 9px;
 }
 
-.username-input input:disabled {
+.userdata-input input:disabled {
     border: 0;
     padding: 12px;
     user-select: none;
     cursor: not-allowed;
 }
 
-.username-input .switcher {
+.userdata-input .switcher {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.username-input .switcher i {
+.userdata-input .switcher i {
     font-size: 40px;
     margin-right: 20px;
 }
 
-.username-input label {
+.userdata-input label {
     background-color: var(--menu-background);
     width: 60px;
     height: 35px;
@@ -290,7 +290,7 @@ td.move:hover {
     border-radius: 20px;
 }
 
-.username-input label .slider {
+.userdata-input label .slider {
     width: 25px;
     height: 25px;
     background-color: white;
@@ -299,16 +299,58 @@ td.move:hover {
 }
 
 /* nějaká magie */
-.username-input label input:checked+.slider {
+.userdata-input label input:checked+.slider {
     transform: translateX(25px);
 }
 
-.username-input label:has(input:checked) {
+.userdata-input label:has(input:checked) {
     background-color: var(--terciary-color);
 }
 
-.username-input label input {
+.userdata-input label input {
     display: none;
+}
+
+.bot-depth {
+    display: none;
+}
+
+.bot-depth-slider {
+    width: 200px;
+    height: 10px;
+    background: var(--menu-background);
+    appearance: none;
+    cursor: pointer;
+    outline: none;
+    border-radius: 5px;
+}
+
+.bot-depth-slider::-webkit-slider-thumb,
+.bot-depth-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    aspect-ratio: 1 / 1;
+    outline: none;
+    background: #8460f1;
+    /*border: 2px solid var(--menu-background);*/
+    border: 0;
+    border-radius: 50%;
+    content: '5afds';
+    color: white;
+    transition: 0.2s;
+}
+
+.bot-depth-slider:hover::-webkit-slider-thumb,
+.bot-depth-slider:hover::-moz-range-thumb {
+    background: #5c39c4;
+}
+
+.bot-depth span {
+    position: absolute;
+    margin-left: 5px;
+    color: white;
+    width: max-content;
+    height: max-content;
 }
 
 #start-button {
@@ -337,7 +379,7 @@ td.move:hover {
     display: flex;
     justify-content: space-around;
     position: relative;
-    top: calc(30vh + 320px);
+    top: calc(25vh + 320px);
 }
 
 .bottom-option button {
@@ -467,7 +509,7 @@ td.move:hover {
     color: white;
 }
 
-#load-game{
+#load-game {
     margin-top: 30px;
     display: flex;
 }
@@ -484,7 +526,7 @@ td.move:hover {
     border: 2px solid var(--terciary-color);
 }
 
-#load-game-button{
+#load-game-button {
     color: white;
     margin-left: 10px;
     font-size: 30px;

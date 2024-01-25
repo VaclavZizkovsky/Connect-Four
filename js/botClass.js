@@ -2,8 +2,8 @@
  * @class třída jednoho bota
  */
 class Bot {
-    depth = 8;
-    maxDepth = 8;
+    depth = 0; // hloubka aktuálního minimaxu – měněno v game objektu
+    maxDepth = 9;
 
     constructor() {
 
@@ -56,7 +56,8 @@ class Bot {
             }
 
             if (depth == this.depth) {
-                return bestMove;
+                console.log('vracim: ' + bestMove + '; hloubka: ' + this.depth);
+                return [bestMove, maxEval];
             }
             return maxEval;
         } else {

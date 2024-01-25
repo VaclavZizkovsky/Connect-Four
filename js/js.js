@@ -5,11 +5,13 @@ let users = [
         color: 'red',
         name: 'Hráč 1',
         bot: false,
+        botDepth: 0,
         score: 0,
     }, {
         color: 'blue',
         name: 'Hráč 2',
         bot: false,
+        botDepth: 0,
         score: 0
     }
 ];
@@ -49,6 +51,9 @@ function enterGame() {
     users[0].bot = document.querySelector('#bot-select1').checked;
     users[1].bot = document.querySelector('#bot-select2').checked;
 
+    users[0].botDepth = document.querySelector('#bot-depth-slider-1').value;
+    users[1].botDepth = document.querySelector('#bot-depth-slider-2').value;
+
     inGame = true;
     game = new Game(6, 7, users, false);
     document.querySelector('#start').style.display = 'none';
@@ -75,9 +80,11 @@ function leaveGame() {
     users[0].score = 0;
     users[0].name = 'Hráč 1';
     users[0].bot = false;
+    users[0].botDepth = 0;
     users[1].score = 0;
     users[1].name = 'Hráč 2';
     users[1].bot = false;
+    users[1].botDepth = 0;
 
     if (openedPage == 'analysis') {
         displayOldGames();
@@ -144,11 +151,22 @@ window.addEventListener('keydown', (e) => {
  */
 function disableUsernameInput(input) {
     if (!document.querySelector('#bot-select' + input).checked) {
-        document.querySelector('#username' + input).removeAttribute('disabled')
+        document.querySelector('#bot-depth-' + input).style.display = 'none';
+        document.querySelector('#username' + input).removeAttribute('disabled');
+        document.querySelector('#username' + input).value = '';
     } else {
+        document.querySelector('#bot-depth-' + input).style.display = 'block';
         document.querySelector('#username' + input).setAttribute('disabled', '1');
-        document.querySelector('#username' + input).value = "Bot";
+        document.querySelector('#username' + input).value = 'Bot lvl. ' + document.querySelector('#bot-depth-slider-' + input).value;
     }
+}
+
+function updateSliderSpan(sliderID) {
+    let slider = document.querySelector('#bot-depth-slider-' + sliderID);
+    let span = document.querySelector('#bot-depth-' + sliderID + ' span');
+    let username = document.querySelector('#username' + sliderID);
+    span.innerText = slider.value;
+    username.value = 'Bot lvl. ' + slider.value;
 }
 
 /**
@@ -369,8 +387,12 @@ async function analyseGame(id) {
         boardCopy.latestPosition = true;
         boardCopy.getMovePosition(i + 1, analyzedGame.firstPlayer);
         boardCopy.moves.splice(boardCopy.displayedMove, boardCopy.moves.length - boardCopy.displayedMove);
-        await this.game.doMinimax(boardCopy, this.game.bot.maxDepth)
-        bestMoves.push(this.game.bot.bestMove);
+        await this.game.doMinimax(boardCopy, this.game.bot.maxDepth);
+        let bestMove = {
+            bestMove: this.game.bot.bestMove,
+            evaluation: this.game.bot.evaluation,
+        }
+        bestMoves.push(bestMove);
         await setProgress((i + 1) / analyzedGame.moves.length * 100);
     }
     game.analysis.bestMoves = bestMoves;
@@ -416,7 +438,6 @@ async function analyseCustomGame() {
     let parseSuccess = true;
     for (let i = 0; i < moves.length; i++) {
         let parsedMove = parseInt(moves[i]);
-        console.log(parsedMove >= 1 && parsedMove <= 7);
         if (!(parsedMove >= 1 && parsedMove <= 7)) {
             parseSuccess = false;
             break;
@@ -438,7 +459,6 @@ async function analyseCustomGame() {
 
     game.playingPlayer = moves.length % 2 == 0 ? 'red' : 'blue';
     game.board.moves = moves;
-    console.log(moves);
     game.board.getMovePosition(moves.length, 'red');
 
     //zapne loading

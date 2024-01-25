@@ -135,9 +135,10 @@ class Game {
             /** hledani nejlepsiho tahu */
             let startTime = performance.now();
             let bestMove;
-            await this.doMinimax(this.board.copy(), this.bot.depth);
+            let depth = botColor == this.usersData[0].color ? this.usersData[0].botDepth : this.usersData[1].botDepth;
+            await this.doMinimax(this.board.copy(), depth);
             bestMove = this.bot.bestMove;
-            console.log(bestMove);
+            console.log(this.bot.bestMove);
             let endTime = performance.now();
             console.log('Time: ' + (endTime - startTime) / 1000 + ' s');
 
@@ -215,7 +216,7 @@ class Game {
         }
 
 
-
+        this.botCalculating = false;
         this.gameEnded = false;
         this.gameIsDraw = false;
         this.gameResigned = false;
@@ -247,7 +248,10 @@ class Game {
         this.drawCurrentPosition();
 
         if (this.analysis.analysisMode) {
-            document.querySelector('.best-move').innerHTML = 'Nejlepší tah: ' + this.analysis.bestMoves[this.board.displayedMove - 1];
+            let bestMove = this.analysis.bestMoves[this.board.displayedMove - 1].bestMove == undefined ? '-1' : this.analysis.bestMoves[this.board.displayedMove - 1].bestMove;
+            let evaluation = this.analysis.bestMoves[this.board.displayedMove - 1].evaluation == undefined ? '-1' : this.analysis.bestMoves[this.board.displayedMove - 1].evaluation;
+            document.querySelector('.best-move').innerHTML = 'Nejlepší tah: ' + bestMove;
+            document.querySelector('.eval').innerHTML = 'Eval: ' + evaluation;
         }
     }
 
@@ -342,7 +346,7 @@ class Game {
         /** uloží statistiky */
         this.saveStats();
 
-        if(this.analysis.analysisMode && this.analysis.emptyGame){
+        if (this.analysis.analysisMode && this.analysis.emptyGame) {
             document.querySelector('#save-game-button').style.display = 'inline';
         }
 
@@ -364,6 +368,7 @@ class Game {
      */
     async doMinimax(board, depth) {
         let bestMove = -1;
+        let evaluation = 0;
 
         // TOHLETO ZTĚLESNĚNÍ DEMENCE MI ZABRALO PŘESNĚ 4,5 HODINY ČISTÝHO ČASU
         // TAK MI PROKAŽ TU LASKAVOST A UŽ NA TO NIKDY V ŽIVOTĚ NEŠAHEJ
@@ -383,13 +388,15 @@ class Game {
         }); // pošle v messagi potřebné parametry a tím zapne workera
         await new Promise((resolve) => {
             worker.onmessage = function (e) {
-                bestMove = e.data; // počká na odpověď a tu zapíše do bestMove
+                bestMove = e.data.bestMove; // počká na odpověď a tu zapíše do bestMove
+                evaluation = e.data.evaluation
                 resolve();
             }
         });
 
         worker.terminate(); // zničí workera – zabíral by místo
         this.bot.bestMove = bestMove;
+        this.bot.evaluation = evaluation;
         return bestMove;
     }
 

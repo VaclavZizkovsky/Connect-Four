@@ -240,10 +240,6 @@ class Board {
             return false;
         }
         return this.findPiece(this.getNewPieceRow(this.moves[this.moves.length - 1]) + 1, this.moves[this.moves.length - 1]);
-        /*} else {
-            console.log('co sakra nefunguje');
-            console.log(this);
-        }*/
     }
 
     /**

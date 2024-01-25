@@ -30,8 +30,9 @@
     <div id="start">
         <img src="./img/header.png" id="header">
         <div id="usernames-input">
-            <div class="username-input">
-                <input type="text" id="username1" placeholder="Hráč 1" autocomplete="off"><br /><br /><br />
+            <div class="userdata-input">
+                <input type="text" id="username1" class="username-input" placeholder="Hráč 1"
+                    autocomplete="off"><br /><br /><br />
 
                 <div class="switcher">
                     <i class="fa-solid fa-robot"></i>
@@ -39,10 +40,16 @@
                         <input type="checkbox" id="bot-select1" autocomplete="off" onchange="disableUsernameInput(1)">
                         <div class="slider"></div>
                     </label>
+                </div><br />
+                <div class="bot-depth" id="bot-depth-1">
+                    <input type="range" id="bot-depth-slider-1" class="bot-depth-slider" min="1" max="9" value="5"
+                        autocomplete="off" oninput="updateSliderSpan(1);">
+                    <span>5</span>
                 </div>
             </div>
-            <div class="username-input">
-                <input type="text" id="username2" placeholder="Hráč 2" autocomplete="off"><br /><br /><br />
+            <div class="userdata-input">
+                <input type="text" id="username2" class="username-input" placeholder="Hráč 2"
+                    autocomplete="off"><br /><br /><br />
 
                 <div class="switcher">
                     <i class="fa-solid fa-robot"></i>
@@ -50,6 +57,11 @@
                         <input type="checkbox" id="bot-select2" autocomplete="off" onchange="disableUsernameInput(2)">
                         <div class="slider"></div>
                     </label>
+                </div><br />
+                <div class="bot-depth" id="bot-depth-2">
+                    <input type="range" id="bot-depth-slider-2" class="bot-depth-slider" min="1" max="9" value="5"
+                        autocomplete="off" oninput="updateSliderSpan(2);">
+                    <span>5</span>
                 </div>
             </div>
 
@@ -117,10 +129,10 @@
                     Eval: <span>0</span>
                 </div>
                 <div class="analysis-actions">
-                        <button id="copy-game-button" data-title="Kopírovat pozici" onclick="copyPosition()"><i
-                                class="fa-solid fa-copy"></i></button>
-                        <button id="save-game-button" data-title="Uložit hru" onclick="savePosition()"><i
-                                class="fa-solid fa-floppy-disk"></i></button>
+                    <button id="copy-game-button" data-title="Kopírovat pozici" onclick="copyPosition()"><i
+                            class="fa-solid fa-copy"></i></button>
+                    <button id="save-game-button" data-title="Uložit hru" onclick="savePosition()"><i
+                            class="fa-solid fa-floppy-disk"></i></button>
                 </div>
             </div>
             <div class="moves-info">
@@ -170,7 +182,8 @@
             hru</button>
         <div id="load-game">
             <input type="text" id="load-game-input" placeholder="Kód hry">
-            <button id="load-game-button" data-title="Otevřít hru" onclick="analyseCustomGame()"><i class="fa-solid fa-upload"></i></button>
+            <button id="load-game-button" data-title="Otevřít hru" onclick="analyseCustomGame()"><i
+                    class="fa-solid fa-upload"></i></button>
         </div>
         <br />
         <h2>Poslední odehrané hry</h2>
@@ -188,8 +201,7 @@
             Hráč vs. Bot
         </label>
         <label for="last-played-games-select-3" class="last-played-games-select">
-            <input type="checkbox" id="last-played-games-select-3" autocomplete="off" onchange="displayOldGames()"
-                checked>
+            <input type="checkbox" id="last-played-games-select-3" autocomplete="off" onchange="displayOldGames()">
             <span class="checkmark"></span>&nbsp;
             Bot vs. Bot
         </label>
@@ -232,12 +244,14 @@
 <script id="minimax-worker" type="javascript/worker">
     self.onmessage = async function(e){
         let bot = new Bot();
+        bot.depth = e.data.depth;
         board = new Board(e.data.board.pieces, e.data.board.rows, e.data.board.cols);
         board.latestPosition = e.data.board.latestPosition;
         board.displayedMove = e.data.board.displayedMove;
         board.moves = e.data.board.moves;
         depth = e.data.depth;
-        self.postMessage(bot.minimax(board.copy(), depth, true, -Infinity, +Infinity));
+        let minimax = bot.minimax(board.copy(), depth, true, -Infinity, +Infinity);
+        self.postMessage({bestMove:minimax[0], evaluation: minimax[1]});
     }
 </script>
 
