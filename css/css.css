@@ -645,3 +645,25 @@ td.move:hover {
     transition: 0.2s;
     opacity: 1;
 }
+
+#about-text{
+    text-align: left;
+}
+
+#about-text a{
+    color: #5c39c4;
+    text-decoration: none;
+}
+
+#about-text a:hover{
+    color: var(--terciary-color);
+}
+
+h2{
+    margin-top: 50px;
+    text-align: center;
+}
+
+#about-text p{
+    line-height: 1.5;
+}

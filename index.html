@@ -161,7 +161,7 @@
 
     <!-- STATISTIKY -->
     <div id="stats">
-        <button class="home-button" data-title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
+        <button class="home-button" data-title="Domů" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
         <h1>Statistiky</h1>
         <p>Zde si můžeš prohlédnout všechny statistiky</p>
@@ -173,7 +173,7 @@
 
     <!-- ANALÝZA -->
     <div id="analysis">
-        <button class="home-button" data-title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
+        <button class="home-button" data-title="Domů" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
         <!-- list her k analýze -->
         <h1>Analýza</h1>
@@ -212,17 +212,65 @@
 
     <!-- NASTAVENÍ -->
     <div id="settings">
-        <button class="home-button" data-title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
+        <button class="home-button" data-title="Domů" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
+        <h1>Nastavení</h1>
     </div>
 
     <!-- O HŘE -->
     <div id="about">
-        <button class="home-button" data-title="Vrátit se na domovskou obrazovku" onclick="openPage('start')"><i
+        <button class="home-button" data-title="Domů" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
-        <h1>O hře</h1>
-        <p>Začátek vývoje této hry je březen roku 2023. Hru naprogramoval Václav Žižkovský. Použil jsem jazyky HTML,
-            CSS, JavaScript, knihovnu jQuery a soubor ikon FontAwesome, zbytek kódu je mým vlastním autorským dílem</p>
+        <h1>Návod</h1>
+        <p>V následujících odstavcích najdete pravidla hry Connect Four, tipy ke hraní a další užitečné informace</p>
+        <div id="about-text">
+            <h2>Pravidla hry</h2>
+            <p>Connect Four je strategická hra pro dva hráče, kteří se postupně střídají v tazích, v nichž umisťuje
+                každý svoji minci do sloupce na desku o rozměrech 6x7 (mince vždy padá úplně
+                dolů). Jak lze z anglického názvu hry odvodit, vyhrává ten, jemuž se
+                podaří propojit alespoň čtyři ve vodorovném, horizontálním nebo diagonálním směru. </p>
+            <h2>Možnosti aplikace</h2>
+            <p>Hra jde hrát v režimu PvP, kdy se střídají dva reální hráči, nebo může hrát samotný hráč proti
+                botovi. U bota lze zvolit jeho obtížnost pomocí posuvníku. Rovněž existuje možnost nechat hrát dva boty
+                proti sobě. Kdyby ses chtěl ptát, proč bot na levelu 3 porazí toho na levelu 8, tak se neptej, to není
+                bug, ale
+                feature. (teď to jdi zkusit a na zbytek návodu se vykašli) Po vstupu do
+                hry se náhodně zvolí začínající plejer. Končí se po výhře jednoho z hráčů, jeho
+                rezignaci nebo remíze. Po konci se tahy uloží do tzv. localStorage, aby je potom šlo načíst k analýze. V
+                analýze můžeš také zkoumat prázdnou hru, do které si tahy doplníš sám, nebo vložit kód vlastní pozice.
+                Tento
+                mystický kód musí být ve formátu <i>x,y,z</i> a x,y,z jsou čísla sloupců, kam byl zahraný tah oddělená
+                čárkou (příklad: 4,4,3,2,4). Ve statistikách zase najdeš překvapivě tvé statistiky (a v nastavení je nastavení).</p>
+            <h2>Informace o vývoji</h2>
+            <p>Ty jsi ještě tady? No dobře. Teď ti tedy povím vskutku krátký příběh o tom, jak jsem toto dechberoucí,
+                fantastické a geniální veledílo udělal. Hru
+                jsem vytvářel jako svůj menší projekt, který se vzhledem k mému pomalému
+                tempu protáhl na skoro rok (leden 2024). Chtěl jsem si vyzkoušet implementaci minimax algoritmu a
+                paradoxně zrovna ten je dosud nejslabší stránkou celé hry, pomineme-li grafický design, který je odporný
+                u všeho, co jsem kdy stvořil. Během pár dní jsem měl fungující hru, načež jsem dodělával blbosti jako je
+                zobrazení tahů, vzdání se, další hra, atd...</p>
+            <p> Pak jsem ale usoudil, že bych vlastně z téhle drobnosti
+                mohl vytvořit hru, ve které existujou i takové ty vymoženosti jako analýza, statistiky a volba
+                uživatelských jmen, utopit v tom hodiny (nebo spíš dny) času, abych to poté nahrál na svůj GitHub a
+                úspěšně sklidil absolutní nezájem. Jo! Řekl jsem si a utopil jsem v tom hodiny (spíše dny) času. Ale
+                vzato kolem a kolem, vlastně mě to docela bavilo. V budoucnu moc neplánuju se k tomuhle vracet, ale
+                pokud bys chtěl ocenit moji tvrdou dřinu, můžeš mi dát
+                hvězdičku na GitHubu na tenhle projekt, abys mě udělal na malou chvíli šťastným a já se mohl ponořit do
+                dalšího takového zbytečného projektu. (ani peníze nežádám, tak jsem skromný)</p>
+            <p> Níže najdeš krátké shrnutí,
+                které je tu pro
+                ty, jež nebaví číst tyto dlouhé odstavce a stránku jenom prolítnou očima, aby ji potom mohli zavřít a
+                tvrdit, že si ten návod fakt důkladně přečetli.</p>
+            <p>
+            <ul>
+                <li>Začátek vývoje: březen 2023</li>
+                <li>Autor: Václav Žižkovský</li>
+                <li>Jazyky: HTML, CSS, Javascript</li>
+                <li>Verze: 0.8.0</li>
+                <li><a href="https://github.com/VaclavZizkovsky/Connect-Four/" target="_blank">GitHub</a> repo tohoto projektu</li>
+            </ul>
+            </p>
+        </div>
     </div>
 
     <!-- LOADING -->
