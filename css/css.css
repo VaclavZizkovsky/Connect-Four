@@ -378,8 +378,8 @@ td.move:hover {
     left: calc(35vw - 50px);
     display: flex;
     justify-content: space-around;
-    position: relative;
-    top: calc(25vh + 320px);
+    position: absolute;
+    bottom: 10vh;
 }
 
 .bottom-option button {
