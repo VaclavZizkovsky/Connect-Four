@@ -24,13 +24,15 @@ window.onload = (e) => {
     let loadedSettings = JSON.parse(localStorage.getItem('settings'));
     if (loadedSettings == null) {
         loadedSettings = {
-            maxBotDepth: 11,
+            maxBotDepth: 9,
             tooltipsOff: false,
         };
         localStorage.setItem('settings', JSON.stringify(loadedSettings));
 
-        checkCompatibility(); // zkontroluje kompatibilitu  
+          
     }
+
+    checkCompatibility(); // zkontroluje kompatibilitu
 
     settings = loadedSettings;
 

@@ -398,6 +398,12 @@ td.move:hover {
     padding: 0;
 }*/
 
+#version {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+}
+
 #copyright {
     position: absolute;
     bottom: 30px;
