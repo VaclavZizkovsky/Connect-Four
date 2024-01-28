@@ -57,9 +57,11 @@ class Game {
         if (this.analysis.analysisMode) {
             document.querySelector('.playing-player-button').style.display = 'none';
             document.querySelector('.resign-button').style.display = 'none';
+            document.querySelector('.save-game-button').style.display = 'none';
         } else {
             document.querySelector('.playing-player-button').style.display = 'block';
             document.querySelector('.resign-button').style.display = 'block';
+            document.querySelector('.save-game-button').style.display = 'none';
             showMessage('Začíná hráč ' + (this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name));
         }
         await this.drawCurrentPosition();
@@ -102,9 +104,13 @@ class Game {
                 document.querySelector('.best-move').innerHTML = 'Nejlepší tah: počítám...';
                 this.botCalculating = true;
                 await this.doMinimax(this.board.copy(), settings.maxBotDepth);
-                this.analysis.bestMoves[this.board.displayedMove - 1] = this.bot.bestMove;
+                this.analysis.bestMoves[this.board.displayedMove - 1] = {
+                    bestMove: this.bot.bestMove,
+                    evaluation: this.bot.evaluation
+                };
                 this.botCalculating = false;
-                document.querySelector('.best-move').innerHTML = 'Nejlepší tah: ' + this.analysis.bestMoves[this.board.displayedMove - 1];
+                document.querySelector('.best-move').innerHTML = 'Nejlepší tah: ' + this.analysis.bestMoves[this.board.displayedMove - 1].bestMove;
+                document.querySelector('.eval').innerHTML = 'Eval: ' + this.analysis.bestMoves[this.board.displayedMove - 1].evaluation;
             }
             this.changePlayer();
         } else {
@@ -295,13 +301,6 @@ class Game {
 
         /** ukaze kdo je na tahu v menu*/
         document.querySelector('#menu .playing-player-img').setAttribute('src', `./img/${this.playingPlayer}Piece.png`);
-
-        /** počká 1 ms, takže se promítnou změny v HTML */
-        await new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve();
-            }, 1);
-        })
     }
 
     hoverCol(col, unhovering) {
@@ -345,7 +344,7 @@ class Game {
         this.saveStats();
 
         if (this.analysis.analysisMode && this.analysis.emptyGame) {
-            document.querySelector('#save-game-button').style.display = 'inline';
+            document.querySelector('.save-game-button').style.display = 'inline';
         }
 
         this.drawCurrentPosition();

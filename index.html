@@ -96,6 +96,12 @@
             <button class="resign-button" data-title="Vzdát hru" onclick="game.resignGame();">
                 <i class="fa-solid fa-flag"></i>
             </button>
+            <button class="copy-game-button" data-title="Kopírovat pozici" onclick="copyPosition()">
+                <i class="fa-solid fa-copy"></i>
+            </button>
+            <button class="save-game-button" data-title="Uložit hru" onclick="savePosition()">
+                <i class="fa-solid fa-floppy-disk"></i>
+            </button>
             <button class="leave-button" data-title="Odejít" onclick="leaveGame();">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
@@ -124,12 +130,6 @@
                 </div>
                 <div class="eval">
                     Eval: <span>0</span>
-                </div>
-                <div class="analysis-actions">
-                    <button id="copy-game-button" data-title="Kopírovat pozici" onclick="copyPosition()"><i
-                            class="fa-solid fa-copy"></i></button>
-                    <button id="save-game-button" data-title="Uložit hru" onclick="savePosition()"><i
-                            class="fa-solid fa-floppy-disk"></i></button>
                 </div>
             </div>
             <div class="moves-info">

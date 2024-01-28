@@ -148,18 +148,18 @@ function leaveGame() {
 }
 
 function copyPosition() {
-    if (!inGame || !game.analysis.analysisMode) {
+    if (!inGame) {
         return;
     }
     let boardCopy = game.board.copy();
     boardCopy.moves.splice(game.board.displayedMove);
     let position = boardCopy.moves.toString();
     navigator.clipboard.writeText(position);
-    document.querySelector('#copy-game-button i').setAttribute('class', 'fa-solid fa-check');
-    document.querySelector('#copy-game-button').setAttribute('data-title', 'Zkopírováno!');
+    document.querySelector('.copy-game-button i').setAttribute('class', 'fa-solid fa-check');
+    document.querySelector('.copy-game-button').setAttribute('data-title', 'Zkopírováno!');
     setTimeout(() => {
-        document.querySelector('#copy-game-button i').setAttribute('class', 'fa-solid fa-copy');
-        document.querySelector('#copy-game-button').setAttribute('data-title', 'Kopírovat pozici');
+        document.querySelector('.copy-game-button i').setAttribute('class', 'fa-solid fa-copy');
+        document.querySelector('.copy-game-button').setAttribute('data-title', 'Kopírovat pozici');
     }, 1500)
 }
 
@@ -181,7 +181,7 @@ function savePosition() {
     });
     localStorage.setItem('games', JSON.stringify(games));
 
-    document.querySelector('#save-game-button').style.display = 'none';
+    document.querySelector('.save-game-button').style.display = 'none';
     showMessage('Hra byla uložena');
 }
 
@@ -505,7 +505,6 @@ async function analyseGame(id) {
     document.querySelector('#loading').style.display = 'none';
     document.querySelector('#start').style.display = 'none'; //pro jistotu
     document.querySelector('#game').style.display = 'flex';
-    document.querySelector('#save-game-button').style.display = 'none';
 }
 
 /**
@@ -525,7 +524,6 @@ function analyseEmptyGame() {
     document.querySelector('#loading').style.display = 'none';
     document.querySelector('#start').style.display = 'none'; //pro jistotu
     document.querySelector('#game').style.display = 'flex';
-    document.querySelector('#save-game-button').style.display = 'none';
 }
 
 async function analyseCustomGame() {
@@ -574,7 +572,11 @@ async function analyseCustomGame() {
         boardCopy.getMovePosition(i + 1, 'red');
         boardCopy.moves.splice(boardCopy.displayedMove, boardCopy.moves.length - boardCopy.displayedMove);
         await this.game.doMinimax(boardCopy, settings.maxBotDepth);
-        bestMoves.push(this.game.bot.bestMove);
+        let bestMove = {
+            bestMove: this.game.bot.bestMove,
+            evaluation: this.game.bot.evaluation,
+        }
+        bestMoves.push(bestMove);
         await setProgress((i + 1) / moves.length * 100);
     }
     game.analysis.bestMoves = bestMoves;
@@ -588,7 +590,6 @@ async function analyseCustomGame() {
     document.querySelector('#loading').style.display = 'none';
     document.querySelector('#start').style.display = 'none'; //pro jistotu
     document.querySelector('#game').style.display = 'flex';
-    document.querySelector('#save-game-button').style.display = 'none';
     game.makeMove(lastMove);
 }
 
