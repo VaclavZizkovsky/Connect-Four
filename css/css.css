@@ -10,6 +10,8 @@
     --box-shadow-small: rgba(243, 243, 243, 0.527) 0px 0px 15px;
     --sidebar-width: 20vw;
     --terciary-color: #8460f1;
+    --red-coin: #ed5454;
+    --blue-coin: #4c6ced;
 }
 
 *,
@@ -758,4 +760,41 @@ h2 {
 
 #about-text p {
     line-height: 1.5;
+}
+
+#issues {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.issue-name {
+    color: var(--red-coin);
+}
+
+#issues a {
+    color: #5c39c4;
+    text-decoration: none;
+}
+
+#issues a:hover {
+    color: var(--terciary-color);
+}
+
+#issues button {
+    padding: 10px;
+    font-size: 18px;
+    margin-top: 10px;
+    background: white;
+    color: var(--background);
+    font-family: 'Comfortaa', cursive;
+    box-shadow: var(--box-shadow-small);
+}
+
+#issues button:hover {
+    transition: 0.4s;
+    background: var(--background);
+    color: white;
 }

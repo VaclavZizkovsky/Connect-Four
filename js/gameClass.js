@@ -57,11 +57,9 @@ class Game {
         if (this.analysis.analysisMode) {
             document.querySelector('.playing-player-button').style.display = 'none';
             document.querySelector('.resign-button').style.display = 'none';
-            document.querySelector('.settings-button').style.display = 'none';
         } else {
             document.querySelector('.playing-player-button').style.display = 'block';
             document.querySelector('.resign-button').style.display = 'block';
-            document.querySelector('.settings-button').style.display = 'block';
             showMessage('Začíná hráč ' + (this.usersData[0].color == this.playingPlayer ? this.usersData[0].name : this.usersData[1].name));
         }
         await this.drawCurrentPosition();

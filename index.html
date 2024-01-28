@@ -96,9 +96,6 @@
             <button class="resign-button" data-title="Vzdát hru" onclick="game.resignGame();">
                 <i class="fa-solid fa-flag"></i>
             </button>
-            <button class="settings-button" data-title="Nastavení hry">
-                <i class="fa-solid fa-gear"></i>
-            </button>
             <button class="leave-button" data-title="Odejít" onclick="leaveGame();">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
             </button>
@@ -333,6 +330,18 @@
     <!-- SNACKBAR -->
     <div id="message-snackbar">
         Error
+    </div>
+
+    <!-- ISSUES -->
+    <div id="issues">
+        <h1>Zadrž!</h1>
+        <p>Bohužel jsem, v tomto prohlížeči odhalil tyto chyby, které znemožňují správný chod aplikace.</p>
+        <button onclick="openPage('start')">
+            <i class="fa-solid fa-arrow-right"></i>&nbsp;&nbsp;Kašlat na to a pokračovat
+        </button>
+        <div id="issues-list">
+
+        </div>
     </div>
 </body>
 

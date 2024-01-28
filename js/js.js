@@ -28,6 +28,8 @@ window.onload = (e) => {
             tooltipsOff: false,
         };
         localStorage.setItem('settings', JSON.stringify(loadedSettings));
+
+        checkCompatibility(); // zkontroluje kompatibilitu  
     }
 
     settings = loadedSettings;
@@ -35,6 +37,42 @@ window.onload = (e) => {
     // provedení různých nastavení
     executeSettings();
 };
+
+function checkCompatibility() {
+    let issues = [];
+
+    // rozměry obrazovky (aspoň 1024x768)
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    if (width < 1024 || height < 768) {
+        issues.push({
+            name: 'Rozlišení obrazovky',
+            description: 'Máte nízké rozlišení obrazovky, aplikace není na tak malé obrazovky přizpůsobena. Zkus ji otevřít na počítači s rozlišením alespoň 1024x768.'
+        });
+    }
+
+    // worker
+    if (typeof Worker == undefined) {
+        issues.push({
+            name: 'Worker',
+            description: 'Váš prohlížeč nepodporuje tzv. <a href="https://developer.mozilla.org/en-US/docs/Web/API/Worker">workery</a>, bez nich Vám nepůjde hrát s boty, ani analyzovat.'
+        });
+    }
+
+    if (issues.length != 0) {
+        openPage('issues');
+        issues.forEach(issue => {
+            document.querySelector('#issues-list').innerHTML += `<div class="issue">
+                <div class="issue-name">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i>&nbsp;&nbsp;${issue.name}</h3>
+                </div>
+                <div class="issue-description">
+                    <p>${issue.description}</p>
+                </div>
+            </div>`;
+        });
+    }
+}
 
 /**
  * @description zobrazí zprávu ve snackbaru
@@ -215,15 +253,15 @@ async function openPage(id) {
 
 // NASTAVENÍ
 
-function saveSettings(){
+function saveSettings() {
     let maxBotDepth = document.querySelector('#max-bot-depth-input').value;
-    if(!(parseInt(maxBotDepth) > 0)){
+    if (!(parseInt(maxBotDepth) > 0)) {
         showMessage('Špatný vstup u maximální hloubky bota');
         return;
     }
     settings.maxBotDepth = parseInt(maxBotDepth);
     settings.tooltipsOff = !document.querySelector('#tooltips-setting-checkbox').checked;
-    
+
     localStorage.setItem('settings', JSON.stringify(settings));
     executeSettings();
     openPage('start');
@@ -235,7 +273,7 @@ function executeSettings() {
     document.querySelector('#bot-depth-slider-1').setAttribute('max', settings.maxBotDepth);
     document.querySelector('#bot-depth-slider-2').setAttribute('max', settings.maxBotDepth);
     document.querySelector('#max-bot-depth-input').value = settings.maxBotDepth;
-    
+
     //tooltipsOff
     if (settings.tooltipsOff) {
         document.querySelectorAll('[data-title]').forEach(element => {
@@ -345,7 +383,7 @@ function deleteStats() {
 /**
  * @description vymaže všechny hry z localStorage
  */
-function deleteGames(){
+function deleteGames() {
     localStorage.setItem('games', null);
     showMessage('Smazáno');
 }
