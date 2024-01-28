@@ -1,7 +1,7 @@
 # Connect Four
 Implementace populární deskové hry Connect Four v JavaScriptu. Hra nabízí lokální PvP a boty založené na minimax algoritmu. Lze taktéž vidět statistiky a hry komplexně analyzovat.
 ## Instalace
-Pro instalaci stačí stáhnout zazipovaný kód a v prohlížeči otevřít index.html nebo jde hrát [online](https://connectfour.zizkovsky.eu)
+Pro instalaci stačí stáhnout zazipovaný kód a v prohlížeči otevřít index.html nebo jde hrát [online](http://connectfour.zizkovsky.eu)
 ## Features
 - bot s minimax algoritmem
 - statistiky
