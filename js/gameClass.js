@@ -103,7 +103,7 @@ class Game {
             if (this.analysis.analysisMode) {
                 document.querySelector('.best-move').innerHTML = 'Nejlepší tah: počítám...';
                 this.botCalculating = true;
-                await this.doMinimax(this.board.copy(), this.bot.maxDepth);
+                await this.doMinimax(this.board.copy(), settings.maxBotDepth);
                 this.analysis.bestMoves[this.board.displayedMove - 1] = this.bot.bestMove;
                 this.botCalculating = false;
                 document.querySelector('.best-move').innerHTML = 'Nejlepší tah: ' + this.analysis.bestMoves[this.board.displayedMove - 1];

@@ -164,11 +164,9 @@
         <button class="home-button" data-title="Domů" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
         <h1>Statistiky</h1>
-        <p>Zde si můžeš prohlédnout všechny statistiky</p>
+        <p>Zde si můžeš prohlédnout pár statistik.</p>
         <table id="stats-table">
         </table>
-        <button class="delete-stats-button" data-title="Smazat statistiky" onclick="deleteStats();"><i
-                class="fa-solid fa-trash"></i></button>
     </div>
 
     <!-- ANALÝZA -->
@@ -177,9 +175,9 @@
                 class="fa-solid fa-house"></i></button>
         <!-- list her k analýze -->
         <h1>Analýza</h1>
-        <button class="analyse-empty-game-button" onclick="analyseEmptyGame()"><i
-                class="fa-solid fa-compass"></i>&nbsp;&nbsp;Analyzovat prázdnou
-            hru</button>
+        <button class="analyse-empty-game-button" onclick="analyseEmptyGame()">
+            <i class="fa-solid fa-compass"></i>&nbsp;&nbsp;Analyzovat prázdnou hru
+        </button>
         <div id="load-game">
             <input type="text" id="load-game-input" placeholder="Kód hry">
             <button id="load-game-button" data-title="Otevřít hru" onclick="analyseCustomGame()"><i
@@ -212,9 +210,57 @@
 
     <!-- NASTAVENÍ -->
     <div id="settings">
-        <button class="home-button" data-title="Domů" onclick="openPage('start')"><i
+        <button class="home-button" data-title="Neukládat změny" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
         <h1>Nastavení</h1>
+        <p>Nastav si hru svým potřebám.</p>
+        <button id="save-settings-button" onclick="saveSettings()">
+            <i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Uložit a zavřít
+        </button>
+        <div id="settings-list">
+            <div class="setting" id="max-bot-depth">
+                <div class="setting-name">
+                    <span data-title="Nad 10 nedoporučuji">Maximální hloubka bota</span>
+                </div>
+                <div class="setting-setter">
+                    <input type="number" min="1" id="max-bot-depth-input">
+                </div>
+
+            </div>
+            <div class="setting" id="tooltips-setting">
+                <div class="setting-name">
+                    <span>Zapnout tooltipy</span>
+                </div>
+                <div class="setting-setter">
+                    <div class="switcher">
+                        <label for="tooltips-setting-checkbox">
+                            <input type="checkbox" id="tooltips-setting-checkbox" autocomplete="off">
+                            <div class="slider"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="setting">
+                <div class="setting-name">
+                    <span>Smazat statistiky</span>
+                </div>
+                <div class="setting-setter">
+                    <button class="delete-stats-button" data-title="Jseš si jistej?" onclick="deleteStats();">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="setting">
+                <div class="setting-name">
+                    <span>Smazat odehrané hry</span>
+                </div>
+                <div class="setting-setter">
+                    <button class="delete-stats-button" data-title="Fakt?" onclick="deleteGames();">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- O HŘE -->
@@ -222,7 +268,7 @@
         <button class="home-button" data-title="Domů" onclick="openPage('start')"><i
                 class="fa-solid fa-house"></i></button>
         <h1>Návod</h1>
-        <p>V následujících odstavcích najdete pravidla hry Connect Four, tipy ke hraní a další užitečné informace</p>
+        <p>V následujících odstavcích najdete pravidla hry Connect Four, tipy ke hraní a další užitečné informace.</p>
         <div id="about-text">
             <h2>Pravidla hry</h2>
             <p>Connect Four je strategická hra pro dva hráče, kteří se postupně střídají v tazích, v nichž umisťuje
@@ -240,7 +286,8 @@
                 analýze můžeš také zkoumat prázdnou hru, do které si tahy doplníš sám, nebo vložit kód vlastní pozice.
                 Tento
                 mystický kód musí být ve formátu <i>x,y,z</i> a x,y,z jsou čísla sloupců, kam byl zahraný tah oddělená
-                čárkou (příklad: 4,4,3,2,4). Ve statistikách zase najdeš překvapivě tvé statistiky (a v nastavení je nastavení).</p>
+                čárkou (příklad: 4,4,3,2,4). Ve statistikách zase najdeš překvapivě tvé statistiky (a v nastavení je
+                nastavení).</p>
             <h2>Informace o vývoji</h2>
             <p>Ty jsi ještě tady? No dobře. Teď ti tedy povím vskutku krátký příběh o tom, jak jsem toto dechberoucí,
                 fantastické a geniální veledílo udělal. Hru
@@ -267,7 +314,8 @@
                 <li>Autor: Václav Žižkovský</li>
                 <li>Jazyky: HTML, CSS, Javascript</li>
                 <li>Verze: 0.8.0</li>
-                <li><a href="https://github.com/VaclavZizkovsky/Connect-Four/" target="_blank">GitHub</a> repo tohoto projektu</li>
+                <li><a href="https://github.com/VaclavZizkovsky/Connect-Four/" target="_blank">GitHub</a> repo tohoto
+                    projektu</li>
             </ul>
             </p>
         </div>

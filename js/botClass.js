@@ -3,7 +3,6 @@
  */
 class Bot {
     depth = 0; // hloubka aktuálního minimaxu – měněno v game objektu
-    maxDepth = 9;
 
     constructor() {
 

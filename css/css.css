@@ -7,6 +7,7 @@
     --menu-font-size: 60px;
     --message-background: rgb(53, 63, 63);
     --box-shadow: rgba(243, 243, 243, 0.527) 0px 0px 30px;
+    --box-shadow-small: rgba(243, 243, 243, 0.527) 0px 0px 15px;
     --sidebar-width: 20vw;
     --terciary-color: #8460f1;
 }
@@ -473,20 +474,106 @@ td.move:hover {
     transition: 0.2s;
 }
 
-#stats-table td {
-    border: 1px solid white;
+/* NASTAVENÍ */
+#save-settings-button {
     padding: 10px;
+    font-size: 18px;
+    margin-top: 10px;
+    background: white;
+    color: var(--background);
+    font-family: 'Comfortaa', cursive;
+    box-shadow: var(--box-shadow-small);
 }
 
-.delete-stats-button {
-    font-size: 20px;
-    margin-top: 10px;
+#save-settings-button:hover {
+    transition: 0.4s;
+    background: var(--background);
     color: white;
 }
 
-.delete-stats-button:hover {
+#settings-list {
+    width: 600px;
+    margin-top: 50px;
+}
+
+.setting {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.setting input {
+    padding: 10px;
+    font-size: 17px;
+    max-width: 200px;
+    font-family: 'Comfortaa';
+    border-radius: 5px;
+}
+
+.setting input[type='number'] {
+    width: 80px;
+}
+
+.setting-name {
+    font-size: 18px;
+    width: 400px;
+    text-align: left;
+}
+
+.setting-setter {
+    width: 200px;
+}
+
+#tooltips-setting .switcher {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#tooltips-setting label {
+    background-color: var(--menu-background);
+    width: 60px;
+    height: 35px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+#tooltips-setting label .slider {
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    transition: .2s;
+    border-radius: 200px;
+}
+
+/* nějaká magie */
+#tooltips-setting label input:checked+.slider {
+    transform: translateX(25px);
+}
+
+#tooltips-setting label:has(input:checked) {
+    background-color: var(--terciary-color);
+}
+
+#tooltips-setting label input {
+    display: none;
+}
+
+.delete-stats-button {
     font-size: 25px;
-    transition: 0.2s;
+    color: white;
+}
+
+/* STATISTIKY */
+
+#stats-table td {
+    border: 1px solid white;
+    padding: 10px;
 }
 
 #about p {
@@ -500,7 +587,7 @@ td.move:hover {
     background: white;
     color: var(--background);
     font-family: 'Comfortaa', cursive;
-    box-shadow: var(--box-shadow);
+    box-shadow: var(--box-shadow-small);
 }
 
 .analyse-empty-game-button:hover {
@@ -632,11 +719,12 @@ td.move:hover {
 
 [data-title]:hover::after {
     content: attr(data-title);
+    display: inline;
     position: absolute;
     font-size: 15px;
     font-family: 'Comfortaa', cursive;
     background: var(--message-background);
-    box-shadow: rgba(243, 243, 243, 0.527) 0px 0px 15px;
+    box-shadow: var(--box-shadow-small);
     width: max-content;
     padding: 10px;
     margin-left: 10px;
@@ -646,24 +734,28 @@ td.move:hover {
     opacity: 1;
 }
 
-#about-text{
+[data-title].notooltips:hover::after {
+    display: none !important;
+}
+
+#about-text {
     text-align: left;
 }
 
-#about-text a{
+#about-text a {
     color: #5c39c4;
     text-decoration: none;
 }
 
-#about-text a:hover{
+#about-text a:hover {
     color: var(--terciary-color);
 }
 
-h2{
+h2 {
     margin-top: 50px;
     text-align: center;
 }
 
-#about-text p{
+#about-text p {
     line-height: 1.5;
 }

@@ -1,4 +1,5 @@
 var openedPage = 'start';
+var settings;
 var game;
 let users = [
     {
@@ -17,6 +18,23 @@ let users = [
 ];
 let inGame = false;
 let hoveringCol = -1;
+
+window.onload = (e) => {
+    // loadne nastavení
+    let loadedSettings = JSON.parse(localStorage.getItem('settings'));
+    if (loadedSettings == null) {
+        loadedSettings = {
+            maxBotDepth: 11,
+            tooltipsOff: false,
+        };
+        localStorage.setItem('settings', JSON.stringify(loadedSettings));
+    }
+
+    settings = loadedSettings;
+
+    // provedení různých nastavení
+    executeSettings();
+};
 
 /**
  * @description zobrazí zprávu ve snackbaru
@@ -195,6 +213,42 @@ async function openPage(id) {
     })
 }
 
+// NASTAVENÍ
+
+function saveSettings(){
+    let maxBotDepth = document.querySelector('#max-bot-depth-input').value;
+    if(!(parseInt(maxBotDepth) > 0)){
+        showMessage('Špatný vstup u maximální hloubky bota');
+        return;
+    }
+    settings.maxBotDepth = parseInt(maxBotDepth);
+    settings.tooltipsOff = !document.querySelector('#tooltips-setting-checkbox').checked;
+    
+    localStorage.setItem('settings', JSON.stringify(settings));
+    executeSettings();
+    openPage('start');
+    showMessage('Nastavení bylo uloženo');
+}
+
+function executeSettings() {
+    // maxBotDepth
+    document.querySelector('#bot-depth-slider-1').setAttribute('max', settings.maxBotDepth);
+    document.querySelector('#bot-depth-slider-2').setAttribute('max', settings.maxBotDepth);
+    document.querySelector('#max-bot-depth-input').value = settings.maxBotDepth;
+    
+    //tooltipsOff
+    if (settings.tooltipsOff) {
+        document.querySelectorAll('[data-title]').forEach(element => {
+            element.classList.add('notooltips');
+        });
+    } else {
+        document.querySelectorAll('[data-title]').forEach(element => {
+            element.classList.remove('notooltips');
+        });
+    }
+    document.querySelector('#tooltips-setting-checkbox').checked = !settings.tooltipsOff;
+}
+
 //STATISTIKY
 
 /**
@@ -285,8 +339,15 @@ function setStat(stat, value) {
  */
 function deleteStats() {
     localStorage.setItem('stats', null);
+    showMessage('Smazáno');
+}
+
+/**
+ * @description vymaže všechny hry z localStorage
+ */
+function deleteGames(){
     localStorage.setItem('games', null);
-    displayStats();
+    showMessage('Smazáno');
 }
 
 //ANALÝZA
@@ -387,7 +448,7 @@ async function analyseGame(id) {
         boardCopy.latestPosition = true;
         boardCopy.getMovePosition(i + 1, analyzedGame.firstPlayer);
         boardCopy.moves.splice(boardCopy.displayedMove, boardCopy.moves.length - boardCopy.displayedMove);
-        await this.game.doMinimax(boardCopy, this.game.bot.maxDepth);
+        await this.game.doMinimax(boardCopy, settings.maxBotDepth);
         let bestMove = {
             bestMove: this.game.bot.bestMove,
             evaluation: this.game.bot.evaluation,
@@ -474,7 +535,7 @@ async function analyseCustomGame() {
         boardCopy.latestPosition = true;
         boardCopy.getMovePosition(i + 1, 'red');
         boardCopy.moves.splice(boardCopy.displayedMove, boardCopy.moves.length - boardCopy.displayedMove);
-        await this.game.doMinimax(boardCopy, this.game.bot.maxDepth);
+        await this.game.doMinimax(boardCopy, settings.maxBotDepth);
         bestMoves.push(this.game.bot.bestMove);
         await setProgress((i + 1) / moves.length * 100);
     }
